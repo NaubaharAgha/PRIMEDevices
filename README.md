@@ -4,7 +4,7 @@ PRimate Interaction Movement and Enrichement
 
 The PRIME devices are a series of devices that provide interaction capabilities to non-human primates and then give the option of providing reward for these interactions.
 
-First example:
+Examples:
 
 ## B-PRIME
 
