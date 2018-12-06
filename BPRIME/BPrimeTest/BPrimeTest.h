@@ -6,8 +6,9 @@ bool Debug = 1;
 // Running Mode:
 // S: "Standalone mode" doesn't require external input
 // M: "Moroco mode" Waits for Moroco input to progress through the trial
+// B: "Button mode" Waits for button press input on pin 16 and manually moves the motor
 // X: "XBI mode" communicates with the XBI <---- NOT IMPLEMENTED YET! ----
-char runningMode = 'M';
+char runningMode = 'B';
 
 // Trial Types:
 // "normal": cue stays on
@@ -51,12 +52,14 @@ int barrelrollLEDsPIN = 14; //Front face Left and Right indicators
 
 int startTrialTrigger = 15; //Input to trigger start of a trial
 
-const int stp = 23;
-const int dir = 22;
-const int MS1 = 21;
-const int MS2 = 20;
-const int AENABLE = 19;
+int but = 16;
+
 const int debug = 18;
+const int AENABLE = 19;
+const int MS2 = 20;
+const int MS1 = 21;
+const int dir = 22;
+const int stp = 23;
 
 //---------------------------------- Initialization
 

@@ -20,6 +20,12 @@ void setup()
   servo_0.write(angle);  // Initialize to front center angle
   delay(1000);
   pinMode(boardLED, OUTPUT);
+  resetEDPins(); //Set step, direction, microstep and enable pins to default states
+  pinMode(stp, OUTPUT);
+  pinMode(dir, OUTPUT);
+  pinMode(MS1, OUTPUT);
+  pinMode(MS2, OUTPUT);
+  pinMode(AENABLE, OUTPUT);
 
   // Set IR sensor pins as input
   pinMode(sensorRT, INPUT);
@@ -33,6 +39,9 @@ void setup()
 
   pinMode(startTrialTrigger, INPUT_PULLDOWN);
   //digitalRead(startTrialTrigger);
+
+  //Set input button to move motor manually to a pulldown input
+  pinMode(but, INPUT_PULLDOWN);
   
   // Initialize Cue Light Strip
   cueStrip.begin();
@@ -117,6 +126,12 @@ void loop()
       }
     }
     
+    break;
+    case 'B':
+        if (digitalRead(but)){
+          spinMotor();
+          Serial.println("Pushed the button");
+        }
     break;
   }
   
@@ -297,6 +312,26 @@ void dispenseTreat(int numSteps, bool rotDirection){
   
 }
 
+void spinMotor() {
+  Serial.println("Stepping at 1/8th microstep mode.");
+  //digitalWrite(dir, LOW); //Pull direction pin low to move "forward" // ALREADY SET EARLIER 
+  digitalWrite(MS1, HIGH); //Pull MS1, and MS2 high to set logic to 1/8th microstep resolution
+  digitalWrite(MS2, HIGH);
+
+  dispenseTreat(3,true);
+}
+
+//Reset Easy Driver pins to default states
+void resetEDPins()
+{
+  digitalWrite(stp, LOW);
+  digitalWrite(dir, LOW);
+  digitalWrite(MS1, LOW);
+  digitalWrite(MS2, LOW);
+  digitalWrite(AENABLE, HIGH);
+}
+
+
 void sensorInterrupt() {
      // DEBUG: Serial output if IR sensor tripped
   if (Debug){
@@ -311,13 +346,3 @@ void sensorInterrupt() {
     Serial.println ("Waiting for ready signal.");
   }
 }
-
-void spinMotor() {
-  Serial.println("Stepping at 1/8th microstep mode.");
-  //digitalWrite(dir, LOW); //Pull direction pin low to move "forward" // ALREADY SET EARLIER 
-  digitalWrite(MS1, HIGH); //Pull MS1, and MS2 high to set logic to 1/8th microstep resolution
-  digitalWrite(MS2, HIGH);
-
-  dispenseTreat(1,true);
-}
-
