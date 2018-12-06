@@ -318,7 +318,7 @@ void spinMotor() {
   digitalWrite(MS1, HIGH); //Pull MS1, and MS2 high to set logic to 1/8th microstep resolution
   digitalWrite(MS2, HIGH);
 
-  dispenseTreat(3,true);
+  dispenseTreat(1,true);
 }
 
 //Reset Easy Driver pins to default states
