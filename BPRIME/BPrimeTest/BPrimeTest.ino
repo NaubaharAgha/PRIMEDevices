@@ -292,7 +292,7 @@ void dispenseTreat(int numSteps, bool rotDirection){
 // numSteps is how many treats should be delivered (less than 1 has a probability of delivering treats. 0.25 is enough not to deliver a treat.
 // rotDireciton is to go forward or backwards. Toggle this boolean to switch directions.
 
-  int totalSteps = numSteps * 200;
+  int totalSteps = numSteps * stepFactor;
   if(rotDirection)
   {
     digitalWrite(dir, LOW);
@@ -318,7 +318,7 @@ void spinMotor() {
   digitalWrite(MS1, HIGH); //Pull MS1, and MS2 high to set logic to 1/8th microstep resolution
   digitalWrite(MS2, HIGH);
 
-  dispenseTreat(1,true);
+  dispenseTreat(numTreatstoDispense,true);
 }
 
 //Reset Easy Driver pins to default states

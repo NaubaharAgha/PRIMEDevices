@@ -23,6 +23,9 @@ int ITI = 1000; // Intertrial Interval in ms (time after resetting device and st
 
 int timeToWaitAfterTrigger = 3000; // Wait time after the food well sensor is triggered (in ms)
 
+int numTreatstoDispense = 1; // Number of treats to dispense per dispense request (whole number)
+int stepFactor = 200; // Empirically deterimined number of motor steps to take to dispense a single treat
+
 //---------------------------------- Serial Communication Protocol
 
 #define RESET '$'
