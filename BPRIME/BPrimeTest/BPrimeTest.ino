@@ -1,7 +1,7 @@
 #include <Servo.h>
 #include <Adafruit_NeoPixel.h>
 #include <Encoder.h>
-#include "SmartBarrelTest.h"
+#include "BPrimeTest.h"
 
 void setup()
 {
@@ -68,7 +68,7 @@ void setup()
 }
 
 void loop()
-{
+{ 
   switch(runningMode){
   case 'S':
     while(digitalRead(startTrialTrigger)){
@@ -85,6 +85,24 @@ void loop()
     if (Serial.available() > 0)
     {
       c = Serial.read();
+
+//      switch (c){
+//        case REWARD:
+//        
+//        break;
+//        case MANUAL_REWARD:
+//        
+//        break;
+//        case NEW_TRIAL:
+//        
+//        break;
+//        case SHOW_CUE:
+//        
+//        break;
+//        case 'R':
+//        
+//        break;
+//      }
     }
   
     //handle reset request
@@ -97,24 +115,6 @@ void loop()
           reset = true;
         }
       }
-    }
-
-    switch c{
-      case REWARD:
-      
-      break;
-      case MANUAL_REWARD:
-      
-      break;
-      case NEW_TRIAL:
-      
-      break;
-      case SHOW_CUE:
-      
-      break;
-      case 'R':
-      
-      break;
     }
     
     break;
@@ -273,6 +273,30 @@ void resetDevice() {
   delay(1000);
 }
 
+void dispenseTreat(int numSteps, bool rotDirection){
+// numSteps is how many treats should be delivered (less than 1 has a probability of delivering treats. 0.25 is enough not to deliver a treat.
+// rotDireciton is to go forward or backwards. Toggle this boolean to switch directions.
+
+  int totalSteps = numSteps * 200;
+  if(rotDirection)
+  {
+    digitalWrite(dir, LOW);
+  }
+  else
+  {
+    digitalWrite(dir,HIGH);
+  }
+
+  for(int x= 1; x<totalSteps; x++)  //Loop the forward stepping enough times for motion to be visible
+  {
+    digitalWrite(stp,HIGH); //Trigger one step forward
+    delay(1);
+    digitalWrite(stp,LOW); //Pull step pin low so it can be triggered again
+    delay(1);
+  }
+  
+}
+
 void sensorInterrupt() {
      // DEBUG: Serial output if IR sensor tripped
   if (Debug){
@@ -289,7 +313,11 @@ void sensorInterrupt() {
 }
 
 void spinMotor() {
-  
-}
+  Serial.println("Stepping at 1/8th microstep mode.");
+  //digitalWrite(dir, LOW); //Pull direction pin low to move "forward" // ALREADY SET EARLIER 
+  digitalWrite(MS1, HIGH); //Pull MS1, and MS2 high to set logic to 1/8th microstep resolution
+  digitalWrite(MS2, HIGH);
+
+  dispenseTreat(1,true);
 }
 

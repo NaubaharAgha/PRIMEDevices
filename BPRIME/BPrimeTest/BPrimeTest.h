@@ -51,12 +51,12 @@ int barrelrollLEDsPIN = 14; //Front face Left and Right indicators
 
 int startTrialTrigger = 15; //Input to trigger start of a trial
 
-const int stp 23
-const int dir 22
-const int MS1 21
-const int MS2 20
-const int AENABLE  19
-const int debug 18
+const int stp = 23;
+const int dir = 22;
+const int MS1 = 21;
+const int MS2 = 20;
+const int AENABLE = 19;
+const int debug = 18;
 
 //---------------------------------- Initialization
 
@@ -69,6 +69,9 @@ int angle = startAngle;   // servo position in degrees
 Adafruit_NeoPixel cueStrip = Adafruit_NeoPixel(3, cueLEDsPIN);
 Adafruit_NeoPixel foodwellStrip = Adafruit_NeoPixel(4, foodwellLEDsPIN);
 Adafruit_NeoPixel barrelrollStrip = Adafruit_NeoPixel(2, barrelrollLEDsPIN);
+
+byte c;
+boolean reset;
 
 //---------------------------------- Variables
 
