@@ -20,12 +20,10 @@ void setup()
   servo_0.write(angle);  // Initialize to front center angle
   delay(1000);
   pinMode(boardLED, OUTPUT);
-  resetEDPins(); //Set step, direction, microstep and enable pins to default states
-  pinMode(stp, OUTPUT);
-  pinMode(dir, OUTPUT);
-  pinMode(MS1, OUTPUT);
-  pinMode(MS2, OUTPUT);
-  pinMode(AENABLE, OUTPUT);
+  pinMode(pulPin, OUTPUT);
+  pinMode(dirPin, OUTPUT);
+  pinMode(enblPin, OUTPUT);
+  resetMotorPins(); // Initialize Motor Driver pins
 
   // Set IR sensor pins as input
   pinMode(sensorRT, INPUT);
@@ -69,7 +67,9 @@ void setup()
   foodwellStrip.show();
 
   Serial.begin(9600);
-  Serial.print("Setup");
+  if (Debug){
+    Serial.print("Setup");
+  }
   
   resetDevice();
   prepareTrial();
@@ -78,6 +78,7 @@ void setup()
 
 void loop()
 { 
+  
   switch(runningMode){
   case 'S':
     while(digitalRead(startTrialTrigger)){
@@ -130,7 +131,9 @@ void loop()
     case 'B':
         if (digitalRead(but)){
           spinMotor();
-          Serial.println("Pushed the button");
+          if (Debug){
+            Serial.println("Pushed the button");
+          }
         }
     break;
   }
@@ -295,40 +298,51 @@ void dispenseTreat(int numSteps, bool rotDirection){
   int totalSteps = numSteps * stepFactor;
   if(rotDirection)
   {
-    digitalWrite(dir, LOW);
+    digitalWrite(dirPin, LOW);
   }
   else
   {
-    digitalWrite(dir,HIGH);
+    digitalWrite(dirPin,HIGH);
   }
 
   for(int x= 1; x<totalSteps; x++)  //Loop the forward stepping enough times for motion to be visible
   {
-    digitalWrite(stp,HIGH); //Trigger one step forward
+//    digitalWrite(stp,HIGH); //Trigger one step forward
     delay(1);
-    digitalWrite(stp,LOW); //Pull step pin low so it can be triggered again
+//    digitalWrite(stp,LOW); //Pull step pin low so it can be triggered again
     delay(1);
   }
   
 }
 
 void spinMotor() {
-  Serial.println("Stepping at 1/8th microstep mode.");
-  //digitalWrite(dir, LOW); //Pull direction pin low to move "forward" // ALREADY SET EARLIER 
-  digitalWrite(MS1, HIGH); //Pull MS1, and MS2 high to set logic to 1/8th microstep resolution
-  digitalWrite(MS2, HIGH);
-
-  dispenseTreat(numTreatstoDispense,true);
+  while(digitalRead(but)){
+    if (Debug){
+      Serial.println("Button still pressed");
+    }
+    digitalWrite(pulPin, HIGH);
+    delay(1);
+    digitalWrite(pulPin, LOW);
+    delay(1);
+  }
+  //dispenseTreat(numTreatstoDispense,true);
 }
 
-//Reset Easy Driver pins to default states
-void resetEDPins()
+//Reset Motor Driver pins to default states
+void resetMotorPins()
 {
-  digitalWrite(stp, LOW);
-  digitalWrite(dir, LOW);
-  digitalWrite(MS1, LOW);
-  digitalWrite(MS2, LOW);
-  digitalWrite(AENABLE, HIGH);
+  digitalWrite(pulPin, LOW);
+  digitalWrite(enblPin, LOW);
+  digitalWrite(dirPin, LOW);
+
+  if (Debug){
+    Serial.println ("Initializing Motor Driver");
+  }
+  delay(300);
+  digitalWrite(enblPin, HIGH);
+  delay(100);
+  digitalWrite(enblPin, LOW);
+  
 }
 
 

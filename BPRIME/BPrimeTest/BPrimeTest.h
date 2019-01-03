@@ -55,14 +55,14 @@ int barrelrollLEDsPIN = 14; //Front face Left and Right indicators
 
 int startTrialTrigger = 15; //Input to trigger start of a trial
 
-int but = 16;
+int but = 16; //Button for manual motor rotation
 
 const int debug = 18;
-const int AENABLE = 19;
-const int MS2 = 20;
-const int MS1 = 21;
-const int dir = 22;
-const int stp = 23;
+const int enblPin = 19;
+const int pulPin = 20;
+const int dirPin = 21;
+//const int dirPin = 22;
+//const int stp = 23;
 
 //---------------------------------- Initialization
 
