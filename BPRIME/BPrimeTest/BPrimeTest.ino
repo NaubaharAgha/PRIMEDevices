@@ -68,7 +68,7 @@ void setup()
 
   Serial.begin(9600);
   if (Debug){
-    Serial.print("Setup");
+    Serial.println("Setup");
   }
   
   resetDevice();
@@ -128,13 +128,13 @@ void loop()
     }
     
     break;
-    case 'B':
-        if (digitalRead(but)){
-          spinMotor();
-          if (Debug){
-            Serial.println("Pushed the button");
-          }
-        }
+  case 'B':
+    if (digitalRead(but)){
+      spinMotor();
+      if (Debug){
+        Serial.println("Pushed the button");
+      }
+    }
     break;
   }
   
@@ -177,7 +177,8 @@ void rotateBarrel(int currTarget) {
           angle -= rotationSpeed;
         }
         if ((angle == 180) || (angle == 0)) {
-          angle = 90;
+          // HANDLE THE SITUATION IF ANGLE REACHES THE LIMIT!!!!!!!!!!!!!!<-------------------------------------------------------
+          //angle = 90;
         }
       }
       servo_0.write(angle);
