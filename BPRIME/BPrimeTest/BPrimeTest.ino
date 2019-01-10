@@ -32,8 +32,8 @@ void setup()
   pinMode(sensorLB, INPUT);
   
   // Set IR inputs (all go into same pin) as an interrupt
-  pinMode(interruptPin, INPUT_PULLUP);
-  attachInterrupt(digitalPinToInterrupt(interruptPin), sensorInterrupt, FALLING);
+  //pinMode(interruptPin, INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(interruptPin), sensorInterrupt, CHANGE);
 
   pinMode(startTrialTrigger, INPUT_PULLDOWN);
   //digitalRead(startTrialTrigger);
@@ -348,16 +348,26 @@ void resetMotorPins()
 
 
 void sensorInterrupt() {
-     // DEBUG: Serial output if IR sensor tripped
+  // DEBUG: Serial output if IR sensor tripped
   if (Debug){
     Serial.println ("IR sensor tripped!");
     digitalWrite(boardLED, LOW);
   }
-  delay(timeToWaitAfterTrigger);
-  keepRunning = false;
-  servo_0.write(startAngle);
-  resetDevice();
-  if (Debug){
-    Serial.println ("Waiting for ready signal.");
+  //int sensorValue = analogRead(interruptPin);
+  if(digitalRead(interruptPin)){
+    servo_0.attach(servoPin);
+    delay(timeToWaitAfterTrigger);
+    keepRunning = false;
+    servo_0.write(startAngle);
+    resetDevice();
+    if (Debug){
+      Serial.println ("Waiting for ready signal.");
+    }
+  }else{
+    keepRunning = false;
+    servo_0.detach();
+    if (Debug){
+      Serial.println ("Sensor tripped, finger still inside. Motor detached");
+    }
   }
 }

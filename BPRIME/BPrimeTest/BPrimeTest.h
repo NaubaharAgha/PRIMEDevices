@@ -3,14 +3,14 @@
 // DEBUG FLAG, set to 1 for Serial Output, 0 to mute output
 bool Debug = 1;
 
-// Running Mode:
+// RUNNING MODE:
 // S: "Standalone mode" doesn't require external input
 // M: "Moroco mode" Waits for Moroco input to progress through the trial
 // B: "Button mode" Waits for button press input on pin 16 and manually moves the motor
 // X: "XBI mode" communicates with the XBI <---- NOT IMPLEMENTED YET! ----
-char runningMode = 'B';
+char runningMode = 'S';
 
-// Trial Types:
+// TRIAL TYPES:
 // "normal": cue stays on
 // "memory": cue turns off after "cueDisplayTime" milliseconds
 // "offset": device starts off center by "offsetAmount"
@@ -18,11 +18,16 @@ String trialType = "normal";
 int offsetAmount = 30; // Set offset amount from 90 (i.e. 30 means 90 +- 30) 
 int cueDisplayTime = 1000; // Memory trial type, cue show time (in ms)
 
-int rotationSpeed = 1; // speed of barrel rotation
+// BARREL MOTOR SECTION
+int rotationSpeed = 60; // speed of barrel rotation in RPM
+int stepsPerRev = 3200; // steps per revolution (set by switches on the driver
+float motorResolution = 360/stepsPerRev; // Determine Motor resolution
+
 int ITI = 1000; // Intertrial Interval in ms (time after resetting device and starting new trial)
 
 int timeToWaitAfterTrigger = 3000; // Wait time after the food well sensor is triggered (in ms)
 
+// TREAT MOTOR SECTION
 int numTreatstoDispense = 1; // Number of treats to dispense per dispense request (whole number)
 int stepFactor = 200; // Empirically deterimined number of motor steps to take to dispense a single treat
 
