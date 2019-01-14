@@ -73,7 +73,7 @@ const int dirPin = 21;
 
 // Initialize Servo
 int startAngle = 90;
-Servo servo_0;
+Servo servo_0; // servo_0 is the main barrel rotating motor
 int angle = startAngle;   // servo position in degrees 
 
 // Initialize LED strips

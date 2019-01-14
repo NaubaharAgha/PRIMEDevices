@@ -355,6 +355,9 @@ void sensorInterrupt() {
   }
   //int sensorValue = analogRead(interruptPin);
   if(digitalRead(interruptPin)){
+    if (Debug){
+      Serial.println ("Finger removed. Motor reattached.");
+    }
     servo_0.attach(servoPin);
     delay(timeToWaitAfterTrigger);
     keepRunning = false;
@@ -367,7 +370,7 @@ void sensorInterrupt() {
     keepRunning = false;
     servo_0.detach();
     if (Debug){
-      Serial.println ("Sensor tripped, finger still inside. Motor detached");
+      Serial.println ("Finger still inside. Motor detached");
     }
   }
 }
