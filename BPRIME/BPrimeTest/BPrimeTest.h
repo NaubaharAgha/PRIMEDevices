@@ -19,13 +19,16 @@ int offsetAmount = 30; // Set offset amount from 90 (i.e. 30 means 90 +- 30)
 int cueDisplayTime = 1000; // Memory trial type, cue show time (in ms)
 
 // BARREL MOTOR SECTION
-int rotationSpeed = 60; // speed of barrel rotation in RPM
-int stepsPerRev = 3200; // steps per revolution (set by switches on the driver
-float motorResolution = 360/stepsPerRev; // Determine Motor resolution
+float rotationSpeed = 0.1; // speed of rotation (stepper step multiplier)
+int stepsPerRev = 200; // steps per revolution (set by switches on the driver DM542)
+float motorResolution = stepsPerRev/360; // Determine Motor resolution
+int stepperSpeed = 500; // stepper speed in RPM
+
+int angleRange = 5; // Degrees of allowance for chosen angle (i.e. 90 becomes +/-5 so between 85 to 95)
 
 int ITI = 1000; // Intertrial Interval in ms (time after resetting device and starting new trial)
 
-int timeToWaitAfterTrigger = 3000; // Wait time after the food well sensor is triggered (in ms)
+int timeToWaitAfterTrigger = 3000; // Wait time after the finger sensor is triggered (in ms)
 
 // TREAT MOTOR SECTION
 int numTreatstoDispense = 1; // Number of treats to dispense per dispense request (whole number)
@@ -62,19 +65,25 @@ int startTrialTrigger = 15; //Input to trigger start of a trial
 
 int but = 16; //Button for manual motor rotation
 
+// Main Barrel Motor pins
 const int debug = 18;
 const int enblPin = 19;
 const int pulPin = 20;
 const int dirPin = 21;
 //const int dirPin = 22;
-//const int stp = 23;
+
+const int potPin = 23;
 
 //---------------------------------- Initialization
 
 // Initialize Servo
 int startAngle = 90;
-Servo servo_0; // servo_0 is the main barrel rotating motor
+//Servo servo_0; // servo_0 is the main barrel rotating motor
 int angle = startAngle;   // servo position in degrees 
+Stepper myStepper(stepsPerRev, 20,9,10,21);
+
+// Initialize Encoder
+Encoder myEnc(encoder0PinA, encoder0PinB);  
 
 // Initialize LED strips
 Adafruit_NeoPixel cueStrip = Adafruit_NeoPixel(3, cueLEDsPIN);
