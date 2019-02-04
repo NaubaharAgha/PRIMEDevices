@@ -34,6 +34,8 @@ int timeToWaitAfterTrigger = 3000; // Wait time after the finger sensor is trigg
 int numTreatstoDispense = 1; // Number of treats to dispense per dispense request (whole number)
 int stepFactor = 200; // Empirically deterimined number of motor steps to take to dispense a single treat
 
+int rotationDir = 1; // Direction to rotate 1 or -1
+
 //---------------------------------- Serial Communication Protocol
 
 #define RESET '$'
@@ -41,6 +43,12 @@ int stepFactor = 200; // Empirically deterimined number of motor steps to take t
 #define REWARD 'r'
 
 //---------------------------------- Pin Assignments 
+
+int hardDirPin = 0;
+
+int unused2 = 1;
+int unused3 = 12;
+int unused4 = 17;
 
 const byte interruptPin = 2;
 
@@ -70,7 +78,8 @@ const int debug = 18;
 const int enblPin = 19;
 const int pulPin = 20;
 const int dirPin = 21;
-//const int dirPin = 22;
+
+const int int2Pin = 22;
 
 const int potPin = 23;
 

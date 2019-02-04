@@ -39,7 +39,9 @@ void setup()
   // Set IR inputs (all go into same pin) as an interrupt
   //pinMode(interruptPin, INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(interruptPin), sensorInterrupt, CHANGE);
-
+  attachInterrupt(digitalPinToInterrupt(int2Pin), sensorInterrupt, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(hardDirPin), dirInterrupt, CHANGE);
+  
   pinMode(startTrialTrigger, INPUT_PULLDOWN);
   //digitalRead(startTrialTrigger);
 
@@ -160,6 +162,8 @@ void rotateBarrel(int currTarget) {
   if (Debug){
     Serial.println("Ready to Rotate Barrel");
   }
+  cueStrip.setPixelColor(0, white);
+  cueStrip.show();
   digitalWrite(boardLED, HIGH);
   keepRunning = true; // This is overwritten by an interrupt
  // Keep allowing the barrel to move until the food well is accessed
@@ -174,12 +178,12 @@ void rotateBarrel(int currTarget) {
       if (digitalRead(encoder0PinB) != aVal) { // Means pin A Changed first - We're Rotating Clockwise
         encoder0Pos--;
         if ((potAngle > 1) && (potAngle < 179)) {
-          motorDir = 1;
+          motorDir = 1*rotationDir;
         }
       } else {// Otherwise B changed first and we're moving CCW
         encoder0Pos++;
         if ((angle > 1) && (angle < 179)) {
-          motorDir = -1;
+          motorDir = -1*rotationDir;
         }
         if ((potAngle >= 179) || (potAngle <= 1)) {
           // HANDLE THE SITUATION IF ANGLE REACHES THE LIMIT!!!!!!!!!!!!!!<-------------------------------------------------------
@@ -245,7 +249,7 @@ void showCue(int targetID){
       cueStrip.setPixelColor(2, pink);
         break;
   }
-  cueStrip.setPixelColor(0, green);
+  cueStrip.setPixelColor(0, red);
   cueStrip.show();
   
   if (trialType == "memory"){    
@@ -259,7 +263,7 @@ void showCue(int targetID){
 void prepareTrial() {
 
   // Begin Cue Strip ("start" mode)
-  cueStrip.setPixelColor(0, white);
+  cueStrip.setPixelColor(0, red);
   cueStrip.setPixelColor(1, off);
   cueStrip.setPixelColor(2, off);
   cueStrip.show();
@@ -337,15 +341,15 @@ void spinMotor() {
   //dispenseTreat(numTreatstoDispense,true);
 }
 
-void writeAngle(int motorAngle){
+void writeAngle(int setAngle){
   myStepper.setSpeed(stepperSpeed/8);
   int potAngle = map(analogRead(potPin), 0, 1023, 0, 180);
   if(Debug){
     Serial.print("Motor position: ");
     Serial.println(potAngle);
   }
-  while((motorAngle - angleRange >= potAngle) || (potAngle >= motorAngle + angleRange)){
-    while(motorAngle > potAngle){
+  while((setAngle - angleRange >= potAngle) || (potAngle >= setAngle + angleRange)){
+    while((setAngle > potAngle) && (potAngle > 0) && (potAngle < 180)){
        myStepper.step(stepsPerRev);
        potAngle = map(analogRead(potPin), 0, 1023, 0, 180);
        if(Debug){
@@ -353,13 +357,19 @@ void writeAngle(int motorAngle){
         Serial.println(potAngle);
        }
     }
-    while(motorAngle < potAngle){
+    while((setAngle < potAngle) && (potAngle > 0) && (potAngle < 180)){
       myStepper.step(-stepsPerRev);
       potAngle = map(analogRead(potPin), 0, 1023, 0, 180);
       if(Debug){
         Serial.print("Motor decreasing position: ");
         Serial.println(potAngle);
        }
+    }
+    if(potAngle >= 180){
+      myStepper.step(-stepsPerRev);
+    }
+    if(potAngle <= 0){
+      myStepper.step(stepsPerRev);
     }
   }
   myStepper.setSpeed(stepperSpeed);
@@ -387,7 +397,7 @@ void fingerInside(char fingerState){
       if (Debug){
         Serial.println ("Finger still inside. Motor detached, while loop.");
       }
-      while(!digitalRead(interruptPin)){
+      while(!digitalRead(interruptPin) || !digitalRead(int2Pin)){
         digitalWrite(enblPin, 1); //Disable motor driver
         cueStrip.setPixelColor(0, red);
         cueStrip.setPixelColor(1, off);
@@ -410,17 +420,29 @@ void fingerInside(char fingerState){
 }
 
 void sensorInterrupt() {
-  digitalWrite(enblPin, 1); //Disable motor driver
-  keepRunning = false;
   // DEBUG: Serial output if IR sensor tripped
   if (Debug){
     Serial.println ("IR sensor tripped!");
   }
+  digitalWrite(enblPin, 1); //Disable motor driver
+  cueStrip.setPixelColor(0, red);
+  cueStrip.show();
+  keepRunning = false;
   digitalWrite(boardLED, LOW);
   //int sensorValue = analogRead(interruptPin);
-  if(!digitalRead(interruptPin)){
+  if(!digitalRead(interruptPin) || !digitalRead(int2Pin)){
     fingerInside('I');
   }else{    
     fingerInside('O');
   }
+}
+
+void dirInterrupt() {
+
+  if(digitalRead(hardDirPin)){
+    rotationDir = 1;
+  }else{    
+    rotationDir = -1;
+  }
+  
 }
