@@ -51,11 +51,11 @@ void setup()
   // Initialize Cue Light Strip
   cueStrip.begin();
   cueStrip.show(); // Initialize all pixels to 'off'
-  cueStrip.setBrightness(255);
+  cueStrip.setBrightness(LEDBrightness);
 
   // Initialize Cue Light Strip
   barrelrollStrip.begin();
-  barrelrollStrip.setBrightness(255);
+  barrelrollStrip.setBrightness(LEDBrightness);
   barrelrollStrip.setPixelColor(0, orange); // Left is Orange
   barrelrollStrip.setPixelColor(1, cyan);   // Right is Cyan
   barrelrollStrip.show();
@@ -66,7 +66,7 @@ void setup()
   // 2 = Right Bottom (RB) = Blue
   // 3 = Right Top (RT) = Yellow
   foodwellStrip.begin();
-  foodwellStrip.setBrightness(255);
+  foodwellStrip.setBrightness(LEDBrightness);
   foodwellStrip.setPixelColor(0, green);
   foodwellStrip.setPixelColor(1, pink);
   foodwellStrip.setPixelColor(2, blue);
@@ -162,7 +162,7 @@ void rotateBarrel(int currTarget) {
   if (Debug){
     Serial.println("Ready to Rotate Barrel");
   }
-  cueStrip.setPixelColor(0, white);
+  cueStrip.setPixelColor(0, green);
   cueStrip.show();
   digitalWrite(boardLED, HIGH);
   keepRunning = true; // This is overwritten by an interrupt
@@ -341,6 +341,14 @@ void spinMotor() {
   //dispenseTreat(numTreatstoDispense,true);
 }
 
+//void writeAngle(int setAngle){
+//  int potAngle = map(analogRead(potPin), 0, 1023, 0, 180);
+//  if(Debug){
+//    Serial.print("Motor position: ");
+//    Serial.println(potAngle);
+//  }
+//}
+
 void writeAngle(int setAngle){
   myStepper.setSpeed(stepperSpeed/8);
   int potAngle = map(analogRead(potPin), 0, 1023, 0, 180);
@@ -349,18 +357,22 @@ void writeAngle(int setAngle){
     Serial.println(potAngle);
   }
   while((setAngle - angleRange >= potAngle) || (potAngle >= setAngle + angleRange)){
-    while((setAngle > potAngle) && (potAngle > 0) && (potAngle < 180)){
+    while((setAngle - angleRange > potAngle) && (potAngle > 0) && (potAngle < 180)){
        myStepper.step(stepsPerRev);
        potAngle = map(analogRead(potPin), 0, 1023, 0, 180);
        if(Debug){
+        cueStrip.setPixelColor(0, blue);
+        cueStrip.show();
         Serial.print("Motor increasing position: ");
         Serial.println(potAngle);
        }
     }
-    while((setAngle < potAngle) && (potAngle > 0) && (potAngle < 180)){
+    while((setAngle + angleRange < potAngle) && (potAngle > 0) && (potAngle < 180)){
       myStepper.step(-stepsPerRev);
       potAngle = map(analogRead(potPin), 0, 1023, 0, 180);
       if(Debug){
+        cueStrip.setPixelColor(0, green);
+        cueStrip.show();
         Serial.print("Motor decreasing position: ");
         Serial.println(potAngle);
        }
@@ -371,6 +383,11 @@ void writeAngle(int setAngle){
     if(potAngle <= 0){
       myStepper.step(stepsPerRev);
     }
+    if(Debug){
+      Serial.print("I'm stuck here: ");
+      Serial.println(potAngle);
+    }
+    potAngle = map(analogRead(potPin), 0, 1023, 0, 180);
   }
   myStepper.setSpeed(stepperSpeed);
 }

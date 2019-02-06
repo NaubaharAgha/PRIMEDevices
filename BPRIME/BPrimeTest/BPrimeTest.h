@@ -36,13 +36,15 @@ int stepFactor = 200; // Empirically deterimined number of motor steps to take t
 
 int rotationDir = 1; // Direction to rotate 1 or -1
 
+int LEDBrightness = 64; // Brightness range from 0 - 255
+
 //---------------------------------- Serial Communication Protocol
 
 #define RESET '$'
 #define MANUAL_REWARD 'R'
 #define REWARD 'r'
 
-//---------------------------------- Pin Assignments 
+//---------------------------------- Pin Assignments green
 
 int hardDirPin = 0;
 
@@ -58,7 +60,7 @@ int encoder0PinA = 7;
 
 int foodwellLEDsPIN = 4; //Foodwell LEDs
 int cueLEDsPIN = 5; //Signal light cue LEDs
-int servoPin = 6;
+int servoPin = 6; //Feeder servo
 
 // Need to remain constants for the rest of the code (switch statement)
 const int sensorLB = 8;
