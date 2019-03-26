@@ -81,9 +81,9 @@ const int enblPin = 19;
 const int pulPin = 20;
 const int dirPin = 21;
 
-const int int2Pin = 22;
+const int int2Pin = 22; //Second interrupt pin
 
-const int potPin = 23;
+const int potPin = 23; //Pot to measure rotation of Main Barrel Motor
 
 //---------------------------------- Initialization
 
