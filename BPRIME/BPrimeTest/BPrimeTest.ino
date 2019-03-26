@@ -420,6 +420,7 @@ void fingerInside(char fingerState){
         cueStrip.setPixelColor(1, off);
         cueStrip.setPixelColor(2, off);
         cueStrip.show();
+        Serial.println ("stuck in while loop.");
       }
       break;
     case 'O':
