@@ -37,7 +37,8 @@ void setup()
   pinMode(sensorLB, INPUT);
   
   // Set IR inputs (all go into same pin) as an interrupt
-  //pinMode(interruptPin, INPUT_PULLUP);
+  pinMode(interruptPin, INPUT_PULLUP);
+  pinMode(int2Pin, INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(interruptPin), sensorInterrupt, CHANGE);
   attachInterrupt(digitalPinToInterrupt(int2Pin), sensorInterrupt, CHANGE);
   attachInterrupt(digitalPinToInterrupt(hardDirPin), dirInterrupt, CHANGE);
