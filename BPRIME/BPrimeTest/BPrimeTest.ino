@@ -258,7 +258,6 @@ void showCue(int targetID){
     cueStrip.setPixelColor(2, off);
     cueStrip.show();
   }
-  
 }
 
 void prepareTrial() {
@@ -277,6 +276,7 @@ void prepareTrial() {
 }
 
 void startTrial(int currTarget){
+  depositReward(currTarget, numTreatstoDispense);
   showCue(currTarget);
   rotateBarrel(currTarget);
 }
@@ -304,19 +304,17 @@ void resetDevice() {
   prepareTrial();
 }
 
-void dispenseTreat(int numSteps, bool rotDirection){
+void depositReward(int targetNumber, int numSteps){
+// targetNumber is which dispenser/target combo was chosen to receive reward. 
+// 0 = Left Top (LT) = Green
+// 1 = Left Bottom (LB) = Pink
+// 2 = Right Bottom (RB) = Blue
+// 3 = Right Top (RT) = Yellow
 // numSteps is how many treats should be delivered (less than 1 has a probability of delivering treats. 0.25 is enough not to deliver a treat.
-// rotDireciton is to go forward or backwards. Toggle this boolean to switch directions.
+
+  
 
   int totalSteps = numSteps * stepFactor;
-  if(rotDirection)
-  {
-    digitalWrite(dirPin, LOW);
-  }
-  else
-  {
-    digitalWrite(dirPin,HIGH);
-  }
 
   for(int x= 1; x<totalSteps; x++)  //Loop the forward stepping enough times for motion to be visible
   {
@@ -334,21 +332,8 @@ void spinMotor() {
       Serial.println("Button still pressed");
     }
     myStepper.step(stepsPerRev);
-    //digitalWrite(pulPin, HIGH);
-    //delay(1);
-    //digitalWrite(pulPin, LOW);
-    //delay(1);
   }
-  //dispenseTreat(numTreatstoDispense,true);
 }
-
-//void writeAngle(int setAngle){
-//  int potAngle = map(analogRead(potPin), 0, 1023, 0, 180);
-//  if(Debug){
-//    Serial.print("Motor position: ");
-//    Serial.println(potAngle);
-//  }
-//}
 
 void writeAngle(int setAngle){
   myStepper.setSpeed(stepperSpeed/8);

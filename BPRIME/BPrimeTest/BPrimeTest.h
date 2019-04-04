@@ -44,7 +44,7 @@ int LEDBrightness = 64; // Brightness range from 0 - 255
 #define MANUAL_REWARD 'R'
 #define REWARD 'r'
 
-//---------------------------------- Pin Assignments green
+//---------------------------------- Pin Assignments
 
 int hardDirPin = 0;
 
