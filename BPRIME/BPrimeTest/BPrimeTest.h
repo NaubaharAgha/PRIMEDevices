@@ -1,7 +1,7 @@
 //---------------------------------- Experimental Parameters
 
 // DEBUG FLAG, set to 1 for Serial Output, 0 to mute output
-bool Debug = 0;
+bool Debug = 1;
 
 // RUNNING MODE:
 // S: "Standalone mode" doesn't require external input

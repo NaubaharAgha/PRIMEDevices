@@ -178,6 +178,7 @@ void rotateBarrel(int currTarget) {
      if (aVal != PastA) { // Means the knob is rotating
       if (digitalRead(encoder0PinB) != aVal) { // Means pin A Changed first - We're Rotating Clockwise
         encoder0Pos--;
+        potAngle = map(analogRead(potPin), 0, 1023, 0, 180);
         if ((potAngle > 1) && (potAngle < 179)) {
           motorDir = 1*rotationDir;
         }
@@ -199,7 +200,7 @@ void rotateBarrel(int currTarget) {
       //int newAngle = angle - oldAngle;
       int moveMotor = motorDir*stepsPerRev*rotationSpeed;
       myStepper.step(moveMotor);
-      
+      potAngle = map(analogRead(potPin), 0, 1023, 0, 180);
       delay(5);  
        
      // DEBUG: Serial output of sensors and actuators
@@ -336,15 +337,17 @@ void spinMotor() {
 }
 
 void writeAngle(int setAngle){
-  myStepper.setSpeed(stepperSpeed/30);
+  myStepper.setSpeed(stepperSpeed/20);
   int potAngle = map(analogRead(potPin), 0, 1023, 0, 180);
   if(Debug){
     Serial.print("Motor position: ");
     Serial.println(potAngle);
   }
   while((setAngle - angleRange >= potAngle) || (potAngle >= setAngle + angleRange)){
+    potAngle = map(analogRead(potPin), 0, 1023, 0, 180);
+    delay(1000);
     while((setAngle - angleRange > potAngle) && (potAngle > 0) && (potAngle < 180)){
-       myStepper.step(stepsPerRev);
+       myStepper.step(stepsPerRev/4);
        potAngle = map(analogRead(potPin), 0, 1023, 0, 180);
        if(Debug){
         cueStrip.setPixelColor(0, blue);
@@ -354,7 +357,7 @@ void writeAngle(int setAngle){
        }
     }
     while((setAngle + angleRange < potAngle) && (potAngle > 0) && (potAngle < 180)){
-      myStepper.step(-stepsPerRev);
+      myStepper.step(-stepsPerRev/4);
       potAngle = map(analogRead(potPin), 0, 1023, 0, 180);
       if(Debug){
         cueStrip.setPixelColor(0, green);
