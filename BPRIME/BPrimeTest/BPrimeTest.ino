@@ -193,7 +193,7 @@ void rotateBarrel(int currTarget) {
           } else {
             angle = 90; 
           }
-          writeAngle(angle);
+          //writeAngle(angle); // DON'T DO ANYTHING
         }
       }
       //int newAngle = angle - oldAngle;
@@ -312,7 +312,7 @@ void depositReward(int targetNumber, int numSteps){
 // 3 = Right Top (RT) = Yellow
 // numSteps is how many treats should be delivered (less than 1 has a probability of delivering treats. 0.25 is enough not to deliver a treat.
 
-  
+  writeAngle(angle); // Initalize main barrel motor to original position to drop reward in the correct position
 
   int totalSteps = numSteps * stepFactor;
 
@@ -336,7 +336,7 @@ void spinMotor() {
 }
 
 void writeAngle(int setAngle){
-  myStepper.setSpeed(stepperSpeed/8);
+  myStepper.setSpeed(stepperSpeed/30);
   int potAngle = map(analogRead(potPin), 0, 1023, 0, 180);
   if(Debug){
     Serial.print("Motor position: ");

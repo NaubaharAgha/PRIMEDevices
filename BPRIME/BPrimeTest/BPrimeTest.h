@@ -1,7 +1,7 @@
 //---------------------------------- Experimental Parameters
 
 // DEBUG FLAG, set to 1 for Serial Output, 0 to mute output
-bool Debug = 1;
+bool Debug = 0;
 
 // RUNNING MODE:
 // S: "Standalone mode" doesn't require external input
@@ -48,9 +48,21 @@ int LEDBrightness = 64; // Brightness range from 0 - 255
 
 int hardDirPin = 0;
 
-int unused2 = 1;
-int unused3 = 12;
-int unused4 = 17;
+int unused13 = 1;
+int unused12 = 12;
+int unused11 = 17;
+int unused10 = 24;
+int unused9 = 25;
+int unused8 = 26;
+int unused7 = 27;
+int unused6 = 28;
+int unused5 = 29;
+int unused4 = 30;
+int unused3 = 31;
+int unused2 = 32;
+int unused1 = 33;
+
+
 
 const byte interruptPin = 2;
 
