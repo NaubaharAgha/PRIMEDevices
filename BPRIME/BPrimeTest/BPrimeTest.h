@@ -44,19 +44,29 @@ int LEDBrightness = 64; // Brightness range from 0 - 255
 #define MANUAL_REWARD 'R'
 #define REWARD 'r'
 
-//---------------------------------- Pin Assignments green
+//---------------------------------- Pin Assignments
 
 int hardDirPin = 0;
 
-int unused2 = 1;
-int unused3 = 12;
-int unused4 = 17;
+int unused11 = 12;
+int unused10 = 24;
+int unused9 = 25;
+int unused8 = 26;
+int unused7 = 27;
+int unused6 = 28;
+int unused5 = 29;
+int unused4 = 30;
+int unused3 = 31;
+int unused2 = 32;
+int unused1 = 33;
+
+
 
 const byte interruptPin = 2;
 
 // Encoder and servo Pins
-int encoder0PinB = 3;
-int encoder0PinA = 7;
+int encoder0PinB = 16;
+int encoder0PinA = 17;
 
 int foodwellLEDsPIN = 4; //Foodwell LEDs
 int cueLEDsPIN = 5; //Signal light cue LEDs
@@ -73,7 +83,7 @@ int barrelrollLEDsPIN = 14; //Front face Left and Right indicators
 
 int startTrialTrigger = 15; //Input to trigger start of a trial
 
-int but = 16; //Button for manual motor rotation
+int but = 1; //Button for manual motor rotation
 
 // Main Barrel Motor pins
 const int debug = 18;
@@ -94,7 +104,7 @@ int angle = startAngle;   // servo position in degrees
 Stepper myStepper(stepsPerRev, 20,9,10,21);
 
 // Initialize Encoder
-Encoder myEnc(encoder0PinA, encoder0PinB);  
+RotaryEncoder encoder(encoder0PinA, encoder0PinB);
 
 // Initialize LED strips
 Adafruit_NeoPixel cueStrip = Adafruit_NeoPixel(3, cueLEDsPIN);
