@@ -1,28 +1,16 @@
 //#include <Servo.h>
 #include <Adafruit_NeoPixel.h>
-#define ENCODER_DO_NOT_USE_INTERRUPTS // SINCE OUR ENCODER DOESN'T USE INTERRUPTS, WE MUST DEFINE THIS BEFORE CALLING THE LIBRARY
-#include <Encoder.h>
+#include <Arduino.h>
+#include <avr/io.h>
+#include <avr/interrupt.h>
+#include <RotaryEncoder.h>
 #include <Stepper.h>
 #include "BPrimeTest.h"
 
 void setup()
 {
-  // Set Encoder pins as input
-  /*
-  pinMode(encoder0PinA, INPUT);
-  digitalWrite(encoder0PinA, HIGH);       // turn on pull-up resistor
-  pinMode(encoder0PinB, INPUT);
-  digitalWrite(encoder0PinB, HIGH);       // turn on pull-up resistor
-  */
-  
-  // Initial value of encoder pins
-  PastA = (boolean)digitalRead(encoder0PinA); //initial value of channel A;
-  PastB = (boolean)digitalRead(encoder0PinB); //and channel B
-  
-  // Attach servo, initialize LED pin, and LCD outputs
-  //servo_0.attach(servoPin);
-  //servo_0.write(angle);  // Initialize to front center angle
-
+ 
+  // Setup Stepper 
   myStepper.setSpeed(stepperSpeed);
   pinMode(boardLED, OUTPUT);
   pinMode(pulPin, OUTPUT);
@@ -42,6 +30,10 @@ void setup()
   attachInterrupt(digitalPinToInterrupt(interruptPin), sensorInterrupt, CHANGE);
   attachInterrupt(digitalPinToInterrupt(int2Pin), sensorInterrupt, CHANGE);
   attachInterrupt(digitalPinToInterrupt(hardDirPin), dirInterrupt, CHANGE);
+
+  // Attach interrupts to the encoder pins
+  attachInterrupt(digitalPinToInterrupt(encoder0PinA), encInt, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(encoder0PinB), encInt, CHANGE);
   
   pinMode(startTrialTrigger, INPUT_PULLDOWN);
   //digitalRead(startTrialTrigger);
@@ -171,35 +163,50 @@ void rotateBarrel(int currTarget) {
   while(keepRunning){
     int potAngle = map(analogRead(potPin), 0, 1023, 0, 180); // Determine current motor position
     int motorDir = 1; // set default motor direction to increasing
-    // Read from the encoder and determine which way it is turning
-    // then write that angle into a motor, as long as it is between
-    // 0 and 180 degrees.
-    int aVal = digitalRead(encoder0PinA); // Read from Encoder Pin A
-     if (aVal != PastA) { // Means the knob is rotating
-      if (digitalRead(encoder0PinB) != aVal) { // Means pin A Changed first - We're Rotating Clockwise
-        encoder0Pos--;
-        potAngle = map(analogRead(potPin), 0, 1023, 0, 180);
-        if ((potAngle > 1) && (potAngle < 179)) {
-          motorDir = 1*rotationDir;
+
+    // Set default position as 0
+    static int pos = 0;
+    static int motorFlag = 0;
+    int moveMotor = 0;
+    
+    // Read current encoder position
+    int newPos = encoder.getPosition();
+    if (pos != newPos) {
+      if(newPos < pos){ //If new position is higher than original position, turn one direction
+        if(potAngle > 1){
+          motorFlag = 1;
         }
-      } else {// Otherwise B changed first and we're moving CCW
-        encoder0Pos++;
-        if ((angle > 1) && (angle < 179)) {
-          motorDir = -1*rotationDir;
-        }
-        if ((potAngle >= 179) || (potAngle <= 1)) {
-          // HANDLE THE SITUATION IF ANGLE REACHES THE LIMIT!!!!!!!!!!!!!!<-------------------------------------------------------
-          if (trialType == "offset"){ 
-            angle = 90 + offsetAmount;
-          } else {
-            angle = 90; 
-          }
-          //writeAngle(angle); // DON'T DO ANYTHING
+        motorDir = -1*rotationDir;
+        if (Debug){
+          cueStrip.setPixelColor(2, red);
+          cueStrip.show();
         }
       }
-      //int newAngle = angle - oldAngle;
-      int moveMotor = motorDir*stepsPerRev*rotationSpeed;
-      myStepper.step(moveMotor);
+      if(newPos > pos){ //If new position is lower than original position, turn the other direction
+        if(potAngle < 179){
+          motorFlag = 1;
+        }
+        motorDir = 1*rotationDir;
+        if (Debug){
+          cueStrip.setPixelColor(2, pink);
+          cueStrip.show();
+        }
+      }
+      pos = newPos;
+      if (Debug){
+        Serial.println(pos);
+      }
+    }else{
+      motorFlag = 0;
+    }
+  
+    potAngle = map(analogRead(potPin), 0, 1023, 0, 180);
+
+      if(motorFlag){
+        moveMotor = motorDir*stepsPerRev*rotationSpeed;
+        myStepper.step(moveMotor);
+      }
+      
       potAngle = map(analogRead(potPin), 0, 1023, 0, 180);
       delay(5);  
        
@@ -210,7 +217,6 @@ void rotateBarrel(int currTarget) {
          Serial.print (", Motor: ");
          Serial.println (moveMotor);
       }
-    }
   }
 }
 
@@ -441,6 +447,11 @@ void sensorInterrupt() {
   }else{    
     fingerInside('O');
   }
+}
+
+// This routine will only be called on any signal change on encoder pins: exactly where we need to check.
+void encInt(){
+  encoder.tick(); // just call tick() to check the state.
 }
 
 void dirInterrupt() {
