@@ -333,7 +333,7 @@ void depositReward(int targetNumber, int numSteps){
 
   magnetTestFlag = 0; // Prepare to flip the flag once the magnet in the correct position is detected
   
-  writeAngle(arrayPos[targetNumber]); // Turn main barrel motor to position of "targetNumber" reward position from the arrayPos array to align for treat deposition
+  //writeAngle(arrayPos[targetNumber]); // Turn main barrel motor to position of "targetNumber" reward position from the arrayPos array to align for treat deposition
 
 //  if(magnetTestFlag){  
     digitalWrite(treatEnable, 0); //Enable treat motor driver
