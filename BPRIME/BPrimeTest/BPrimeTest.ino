@@ -38,12 +38,12 @@ void setup()
   attachInterrupt(digitalPinToInterrupt(encoder0PinB), encInt, CHANGE);
 
   // Treat Button ALWAYS deposits a treat <------------------------------------HARD CODED INTO POSITION 0... CHANGE THIS!
-  pinMode(treatBut, INPUT_PULLDOWN);
-  attachInterrupt(digitalPinToInterrupt(treatBut), treatDispense, RISING);
+  //pinMode(treatBut, INPUT_PULLDOWN);
+  //attachInterrupt(digitalPinToInterrupt(treatBut), treatDispense, RISING);
 
   // Magnetic Sensor always records pot position when it is tripped 
-  pinMode(magSensor, INPUT_PULLUP);
-  attachInterrupt(digitalPinToInterrupt(magSensor), magTripped, FALLING);
+  //pinMode(magSensor, INPUT_PULLDOWN);
+  //attachInterrupt(digitalPinToInterrupt(magSensor), magTripped, RISING);
   
   pinMode(startTrialTrigger, INPUT_PULLDOWN);
   //digitalRead(startTrialTrigger);
@@ -81,7 +81,12 @@ void setup()
     Serial.println("Setup");
   }
 
-  initializePositions();
+  // If the pin on "but" is HIGH, then begin with the initialization phase and remember all array positions
+  // If not, you are screwed anyway...
+  // TODO: Add default array positions...
+  //if(digitalRead(but)){
+  //  initializePositions();
+  //}
   resetDevice();
   prepareTrial();
   
@@ -139,14 +144,6 @@ void loop()
     }
     
     break;
-  case 'B':
-    if (digitalRead(but)){
-      spinMotor();
-      if (Debug){
-        Serial.println("Pushed the button");
-      }
-    }
-    break;
   }
   
 // Reset the motor angle immediately, as soon as it reaches 0 or 180
@@ -184,7 +181,7 @@ void rotateBarrel(int currTarget) {
     // Read current encoder position
     int newPos = encoder.getPosition();
     if (pos != newPos) {
-      if(newPos < pos){ //If new position is higher than original position, turn one direction
+      if(newPos < pos){ //If new position is lower than original position, turn one direction
         if(potAngle > 1){
           motorFlag = 1;
         }
@@ -194,7 +191,7 @@ void rotateBarrel(int currTarget) {
           cueStrip.show();
         }
       }
-      if(newPos > pos){ //If new position is lower than original position, turn the other direction
+      if(newPos > pos){ //If new position is higher than original position, turn the other direction
         if(potAngle < 179){
           motorFlag = 1;
         }
@@ -334,9 +331,13 @@ void depositReward(int targetNumber, int numSteps){
   // 3 = Left Bottom (LB) = Pink
 // numSteps is how many treats should be delivered (less than 1 has a probability of delivering treats. 0.25 is enough not to deliver a treat.
 
-  //writeAngle(angle); // Initalize main barrel motor to original position to drop reward in the correct position
+  magnetTestFlag = 0; // Prepare to flip the flag once the magnet in the correct position is detected
   
-  digitalWrite(treatEnable, 0); //Enable treat motor driver
+  writeAngle(arrayPos[targetNumber]); // Turn main barrel motor to position of "targetNumber" reward position from the arrayPos array to align for treat deposition
+
+//  if(magnetTestFlag){  
+    digitalWrite(treatEnable, 0); //Enable treat motor driver
+//  }
 
   if(treatCounter%intToSwitch){
     treatStepper.step(stepFactor/4*numSteps); // Step backwards a little bit to "shake up the dust/treats" a bit
@@ -439,9 +440,9 @@ void initializePositions(){
       myStepper.step(stepsPerRev/5);
     }
     switch (i) {
-      case 0: arrayPos[5] = magPotPosit;
-      case 5: arrayPos[4] = magPotPosit;
-      default: arrayPos[i-1] = magPotPosit;
+      case 0: arrayPos[5] = magPotPosit; break;
+      case 5: arrayPos[4] = magPotPosit; break;
+      default: arrayPos[i-1] = magPotPosit; break;
     }
     magnetTestFlag = 0;
   }
@@ -503,7 +504,7 @@ void sensorInterrupt() {
   cueStrip.show();
   keepRunning = false;
   digitalWrite(boardLED, LOW);
-  //int sensorValue = analogRead(interruptPin);
+
   if(!digitalRead(interruptPin) || !digitalRead(int2Pin)){
     fingerInside('I');
   }else{    

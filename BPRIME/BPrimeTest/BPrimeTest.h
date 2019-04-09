@@ -6,7 +6,6 @@ bool Debug = 1;
 // RUNNING MODE:
 // S: "Standalone mode" doesn't require external input
 // M: "Moroco mode" Waits for Moroco input to progress through the trial
-// B: "Button mode" Waits for button press input on pin 16 and manually moves the motor
 // X: "XBI mode" communicates with the XBI <---- NOT IMPLEMENTED YET! ----
 char runningMode = 'S';
 
@@ -80,7 +79,7 @@ int unused1 = 33;
 
 int hardDirPin = 0; // Switch to manually switch the rotation direction of the barrel; Default = 1;
 
-int but = 1; // Button for manual motor rotation
+int but = 1; // Button for treat deposition position initialization (hold during startup to begin with initialization phase)
 
 const byte interruptPin = 2; // Interrupt for IR Sensors
 
