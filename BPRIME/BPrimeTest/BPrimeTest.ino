@@ -12,6 +12,8 @@ void setup()
  
   // Setup Stepper 
   myStepper.setSpeed(stepperSpeed);
+  treatStepper.setSpeed(stepperSpeed);
+  digitalWrite(treatEnable, 1); //Disable treat motor driver
   pinMode(boardLED, OUTPUT);
   pinMode(pulPin, OUTPUT);
   pinMode(dirPin, OUTPUT);
@@ -34,6 +36,10 @@ void setup()
   // Attach interrupts to the encoder pins
   attachInterrupt(digitalPinToInterrupt(encoder0PinA), encInt, CHANGE);
   attachInterrupt(digitalPinToInterrupt(encoder0PinB), encInt, CHANGE);
+
+  // Treat Button ALWAYS deposits a treat <------------------------------------HARD CODED INTO POSITION 0... CHANGE THIS!
+  pinMode(treatBut, INPUT_PULLDOWN);
+  attachInterrupt(digitalPinToInterrupt(treatBut), treatDispense, RISING);
   
   pinMode(startTrialTrigger, INPUT_PULLDOWN);
   //digitalRead(startTrialTrigger);
@@ -151,6 +157,7 @@ void loop()
 }
 
 void rotateBarrel(int currTarget) {
+// TODO: Add case to deal with flipping the direction switch. What happens when increasing the encoder decreases the motor angle? (check hardcoded conditionals...)
 
   if (Debug){
     Serial.println("Ready to Rotate Barrel");
@@ -312,25 +319,36 @@ void resetDevice() {
 }
 
 void depositReward(int targetNumber, int numSteps){
+  if (Debug){
+      Serial.println("Treat Requested");
+  }
 // targetNumber is which dispenser/target combo was chosen to receive reward. 
 // 0 = Left Top (LT) = Green
 // 1 = Left Bottom (LB) = Pink
 // 2 = Right Bottom (RB) = Blue
 // 3 = Right Top (RT) = Yellow
 // numSteps is how many treats should be delivered (less than 1 has a probability of delivering treats. 0.25 is enough not to deliver a treat.
-
-  writeAngle(angle); // Initalize main barrel motor to original position to drop reward in the correct position
-
-  int totalSteps = numSteps * stepFactor;
-
-  for(int x= 1; x<totalSteps; x++)  //Loop the forward stepping enough times for motion to be visible
-  {
-//    digitalWrite(stp,HIGH); //Trigger one step forward
-    delay(1);
-//    digitalWrite(stp,LOW); //Pull step pin low so it can be triggered again
-    delay(1);
-  }
   
+  digitalWrite(treatEnable, 0); //Enable treat motor driver
+
+  //writeAngle(angle); // Initalize main barrel motor to original position to drop reward in the correct position
+
+  if(treatCounter%intToSwitch){
+    treatStepper.step(stepFactor/4*numSteps);
+    treatStepper.step((-stepFactor*(4/3))*numSteps); // stepFactor is empirically determined to be the stepsize required to deposit treats
+    if (Debug){
+        Serial.println("Treat Dispensed Backwards");
+    }
+  }else{
+    treatStepper.step(-stepFactor/4*numSteps);
+    treatStepper.step((stepFactor*(4/3))*numSteps); // stepFactor is empirically determined to be the stepsize required to deposit treats
+    if (Debug){
+        Serial.println("Treat Dispensed");
+    }
+  }
+
+  digitalWrite(treatEnable, 1); //Disable treat motor driver
+  treatCounter++;
 }
 
 void spinMotor() {
@@ -343,7 +361,7 @@ void spinMotor() {
 }
 
 void writeAngle(int setAngle){
-  myStepper.setSpeed(stepperSpeed/20);
+  myStepper.setSpeed(stepperSpeed/10);
   int potAngle = map(analogRead(potPin), 0, 1023, 0, 180);
   if(Debug){
     Serial.print("Motor position: ");
@@ -353,7 +371,7 @@ void writeAngle(int setAngle){
     potAngle = map(analogRead(potPin), 0, 1023, 0, 180);
     delay(1000);
     while((setAngle - angleRange > potAngle) && (potAngle > 0) && (potAngle < 180)){
-       myStepper.step(stepsPerRev/4);
+       myStepper.step(stepsPerRev/5);
        potAngle = map(analogRead(potPin), 0, 1023, 0, 180);
        if(Debug){
         cueStrip.setPixelColor(0, blue);
@@ -363,7 +381,7 @@ void writeAngle(int setAngle){
        }
     }
     while((setAngle + angleRange < potAngle) && (potAngle > 0) && (potAngle < 180)){
-      myStepper.step(-stepsPerRev/4);
+      myStepper.step(-stepsPerRev/5);
       potAngle = map(analogRead(potPin), 0, 1023, 0, 180);
       if(Debug){
         cueStrip.setPixelColor(0, green);
@@ -392,6 +410,9 @@ void resetMotorPins(){
   digitalWrite(pulPin, LOW);
   digitalWrite(enblPin, LOW);
   digitalWrite(dirPin, LOW);
+  digitalWrite(treatDir, LOW);
+  digitalWrite(treatPulse, LOW);
+  digitalWrite(treatEnable, LOW);
 
   if (Debug){
     Serial.println ("Initializing Motor Driver");
@@ -431,6 +452,17 @@ void fingerInside(char fingerState){
   }
 }
 
+void treatDispense() {
+   static unsigned long last_interrupt_time = 0;
+   unsigned long interrupt_time = millis();
+   // If interrupts come faster than 200ms, assume it's a bounce and ignore
+   if (interrupt_time - last_interrupt_time > 1000) 
+   {
+      depositReward(0,1);
+   }
+   last_interrupt_time = interrupt_time;
+}
+
 void sensorInterrupt() {
   // DEBUG: Serial output if IR sensor tripped
   if (Debug){
@@ -451,7 +483,7 @@ void sensorInterrupt() {
 
 // This routine will only be called on any signal change on encoder pins: exactly where we need to check.
 void encInt(){
-  encoder.tick(); // just call tick() to check the state.
+     encoder.tick(); // just call tick() to check the state.
 }
 
 void dirInterrupt() {

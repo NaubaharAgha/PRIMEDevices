@@ -32,11 +32,14 @@ int timeToWaitAfterTrigger = 3000; // Wait time after the finger sensor is trigg
 
 // TREAT MOTOR SECTION
 int numTreatstoDispense = 1; // Number of treats to dispense per dispense request (whole number)
-int stepFactor = 200; // Empirically deterimined number of motor steps to take to dispense a single treat
+int stepFactor = 6*stepsPerRev; // Empirically deterimined number of motor steps to take to dispense a single treat
 
 int rotationDir = 1; // Direction to rotate 1 or -1
 
 int LEDBrightness = 64; // Brightness range from 0 - 255
+
+int treatCounter = 0; // Keep track of how many treats have been dispensed (can be sent out at some point...)
+int intToSwitch = 5; // Interval to switch direction on the motor (after ever x treats, turn the opposite direction once)
 
 //---------------------------------- Serial Communication Protocol
 
@@ -46,9 +49,6 @@ int LEDBrightness = 64; // Brightness range from 0 - 255
 
 //---------------------------------- Pin Assignments
 
-int hardDirPin = 0;
-
-int unused11 = 12;
 int unused10 = 24;
 int unused9 = 25;
 int unused8 = 26;
@@ -60,17 +60,19 @@ int unused3 = 31;
 int unused2 = 32;
 int unused1 = 33;
 
+int hardDirPin = 0; // Switch to manually switch the rotation direction of the barrel; Default = 1;
 
+int but = 1; // Button for manual motor rotation
 
-const byte interruptPin = 2;
+const byte interruptPin = 2; // Interrupt for IR Sensors
 
-// Encoder and servo Pins
-int encoder0PinB = 16;
-int encoder0PinA = 17;
-
+int barrelrollLEDsPIN = 3; //Front face Left and Right indicators
 int foodwellLEDsPIN = 4; //Foodwell LEDs
 int cueLEDsPIN = 5; //Signal light cue LEDs
-int servoPin = 6; //Feeder servo
+
+int startTrialTrigger = 6; // Input to trigger start of a trial
+
+int treatBut = 7; // Button to manually dispense a treat
 
 // Need to remain constants for the rest of the code (switch statement)
 const int sensorLB = 8;
@@ -78,30 +80,37 @@ const int sensorLT = 9;
 const int sensorRT = 10;
 const int sensorRB = 11;
 
+int magSensor = 12;
+
 int boardLED = 13;
-int barrelrollLEDsPIN = 14; //Front face Left and Right indicators
 
-int startTrialTrigger = 15; //Input to trigger start of a trial
+// Feeder Stepper motor pins
+int treatDir = 14; //Treat motor direction
+int treatPulse = 15; //Feeder pulse
+int treatEnable = 16; // Treat motor enable
 
-int but = 1; //Button for manual motor rotation
+// Encoder Interrupt Pins (Need to be Analog... I think?)
+int encoder0PinA = 17;
+int encoder0PinB = 18;
 
 // Main Barrel Motor pins
-const int debug = 18;
 const int enblPin = 19;
 const int pulPin = 20;
 const int dirPin = 21;
 
-const int int2Pin = 22; //Second interrupt pin
+const int int2Pin = 22; //Second IR interrupt pin
 
 const int potPin = 23; //Pot to measure rotation of Main Barrel Motor
 
 //---------------------------------- Initialization
 
-// Initialize Servo
+// Initialize Stepper
 int startAngle = 90;
-//Servo servo_0; // servo_0 is the main barrel rotating motor
 int angle = startAngle;   // servo position in degrees 
-Stepper myStepper(stepsPerRev, 20,9,10,21);
+
+Stepper myStepper(stepsPerRev, pulPin, dirPin); // MAIN INNER BARREL STEPPER MOTOR
+
+Stepper treatStepper(stepsPerRev, treatPulse, treatDir); //SECONDARY TREAT DISPENSER STEPPER MOTOR
 
 // Initialize Encoder
 RotaryEncoder encoder(encoder0PinA, encoder0PinB);
