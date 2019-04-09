@@ -77,7 +77,7 @@ int unused3 = 31;
 int unused2 = 32;
 int unused1 = 33;
 
-int hardDirPin = 0; // Switch to manually switch the rotation direction of the barrel; Default = 1;
+int hardDirPin = 0; // Switch to manually switch the rotation direction of the barrel; Default = 0;
 
 int but = 1; // Button for treat deposition position initialization (hold during startup to begin with initialization phase)
 

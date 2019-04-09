@@ -292,7 +292,7 @@ void prepareTrial() {
 }
 
 void startTrial(int currTarget){
-  depositReward(currTarget, numTreatstoDispense);
+  //depositReward(currTarget, numTreatstoDispense);
   showCue(currTarget);
   rotateBarrel(currTarget);
 }
