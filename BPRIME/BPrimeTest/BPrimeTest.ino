@@ -40,6 +40,10 @@ void setup()
   // Treat Button ALWAYS deposits a treat <------------------------------------HARD CODED INTO POSITION 0... CHANGE THIS!
   pinMode(treatBut, INPUT_PULLDOWN);
   attachInterrupt(digitalPinToInterrupt(treatBut), treatDispense, RISING);
+
+  // Magnetic Sensor always records pot position when it is tripped 
+  pinMode(magSensor, INPUT_PULLUP);
+  attachInterrupt(digitalPinToInterrupt(magSensor), magTripped, FALLING);
   
   pinMode(startTrialTrigger, INPUT_PULLDOWN);
   //digitalRead(startTrialTrigger);
@@ -60,10 +64,10 @@ void setup()
   barrelrollStrip.show();
   
   // Initialize and light up food wells, declared here since these dont change
-  // 0 = Left Top (LT) = Green
-  // 1 = Left Bottom (LB) = Pink
-  // 2 = Right Bottom (RB) = Blue
-  // 3 = Right Top (RT) = Yellow
+  // 0 = Right Bottom (RB) = Blue
+  // 1 = Right Top (RT) = Yellow
+  // 2 = Left Top (LT) = Green
+  // 3 = Left Bottom (LB) = Pink
   foodwellStrip.begin();
   foodwellStrip.setBrightness(LEDBrightness);
   foodwellStrip.setPixelColor(0, green);
@@ -76,7 +80,8 @@ void setup()
   if (Debug){
     Serial.println("Setup");
   }
-  
+
+  initializePositions();
   resetDevice();
   prepareTrial();
   
@@ -242,10 +247,10 @@ void showCue(int targetID){
  if (Debug){
   Serial.println("Showing Cue");
  }
-  // 0 = Left Top (LT) = Green
-  // 1 = Left Bottom (LB) = Pink
-  // 2 = Right Bottom (RB) = Blue
-  // 3 = Right Top (RT) = Yellow
+  // 0 = Right Bottom (RB) = Blue
+  // 1 = Right Top (RT) = Yellow
+  // 2 = Left Top (LT) = Green
+  // 3 = Left Bottom (LB) = Pink
   switch(targetID) {
     case sensorRT : 
       cueStrip.setPixelColor(1, cyan);
@@ -323,24 +328,24 @@ void depositReward(int targetNumber, int numSteps){
       Serial.println("Treat Requested");
   }
 // targetNumber is which dispenser/target combo was chosen to receive reward. 
-// 0 = Left Top (LT) = Green
-// 1 = Left Bottom (LB) = Pink
-// 2 = Right Bottom (RB) = Blue
-// 3 = Right Top (RT) = Yellow
+  // 0 = Right Bottom (RB) = Blue
+  // 1 = Right Top (RT) = Yellow
+  // 2 = Left Top (LT) = Green
+  // 3 = Left Bottom (LB) = Pink
 // numSteps is how many treats should be delivered (less than 1 has a probability of delivering treats. 0.25 is enough not to deliver a treat.
+
+  //writeAngle(angle); // Initalize main barrel motor to original position to drop reward in the correct position
   
   digitalWrite(treatEnable, 0); //Enable treat motor driver
 
-  //writeAngle(angle); // Initalize main barrel motor to original position to drop reward in the correct position
-
   if(treatCounter%intToSwitch){
-    treatStepper.step(stepFactor/4*numSteps);
+    treatStepper.step(stepFactor/4*numSteps); // Step backwards a little bit to "shake up the dust/treats" a bit
     treatStepper.step((-stepFactor*(4/3))*numSteps); // stepFactor is empirically determined to be the stepsize required to deposit treats
     if (Debug){
         Serial.println("Treat Dispensed Backwards");
     }
   }else{
-    treatStepper.step(-stepFactor/4*numSteps);
+    treatStepper.step(-stepFactor/4*numSteps); // Step backwards a little bit to "shake up the dust/treats" a bit
     treatStepper.step((stepFactor*(4/3))*numSteps); // stepFactor is empirically determined to be the stepsize required to deposit treats
     if (Debug){
         Serial.println("Treat Dispensed");
@@ -424,6 +429,31 @@ void resetMotorPins(){
   
 }
 
+void initializePositions(){
+  myStepper.setSpeed(stepperSpeed/10);
+  writeAngle(0);
+  delay(100);
+  magnetTestFlag = 0;
+  for( int i = 0; i <= 5; i++){
+    while(magnetTestFlag == 0){
+      myStepper.step(stepsPerRev/5);
+    }
+    switch (i) {
+      case 0: arrayPos[5] = magPotPosit;
+      case 5: arrayPos[4] = magPotPosit;
+      default: arrayPos[i-1] = magPotPosit;
+    }
+    magnetTestFlag = 0;
+  }
+  myStepper.setSpeed(stepperSpeed);
+  writeAngle(angle);
+
+  if (Debug){
+    Serial.println ("Magnetic sensor tripped!");
+  }
+  
+}
+
 void fingerInside(char fingerState){
   switch(fingerState){
     case 'I':
@@ -484,6 +514,14 @@ void sensorInterrupt() {
 // This routine will only be called on any signal change on encoder pins: exactly where we need to check.
 void encInt(){
      encoder.tick(); // just call tick() to check the state.
+}
+
+void magTripped(){
+  magPotPosit = map(analogRead(potPin), 0, 1023, 0, 180);
+  magnetTestFlag = 1;
+  if (Debug){
+    Serial.println ("Magnetic sensor tripped!");
+  }
 }
 
 void dirInterrupt() {

@@ -41,6 +41,24 @@ int LEDBrightness = 64; // Brightness range from 0 - 255
 int treatCounter = 0; // Keep track of how many treats have been dispensed (can be sent out at some point...)
 int intToSwitch = 5; // Interval to switch direction on the motor (after ever x treats, turn the opposite direction once)
 
+int magnetTestFlag = 0; // Flag initialized at 0, goes high whenever the magnetic sensor is tripped
+int magPotPosit = 0; // Store the pot position every time the magnetic sensor is tripped
+
+// Array of positions (a bit confusing, but as follows:)
+// The order from the top down anticlockwise: 5, 0, 1, 2, 3, 4
+// 0-3: the positions of the treat wells:
+  // 0 = Right Bottom (RB) = Blue
+  // 1 = Right Top (RT) = Yellow
+  // 2 = Left Top (LT) = Green
+  // 3 = Left Bottom (LB) = Pink
+// 4: position of the LEFT limit (180 deg)
+// 5: position of the RIGHT limit (0 deg)
+// Detailed Explanation: When the LEFT treat wells are facing the user, the RIGHT treat wells are directly in the back (0 degrees) [position 5]
+// As the user moves toward the center, the right treat wells move towards the right side of the user (the RIGHT treat wells move clockwise when looking top down).
+// The first treat dispenser (RB) comes up first [position 0]. Second treat dispenser (RT) comes up next  [position 1], and so on...
+// Finally, all treat dispensers pass and the RIGHT treat wells are facing the user, which means the LEFT treat wells are directly in the back (180 degrees) [position 4].
+int arrayPos [6] = { 0, 0, 0, 0, 180, 0 };  
+
 //---------------------------------- Serial Communication Protocol
 
 #define RESET '$'
