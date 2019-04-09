@@ -18,8 +18,8 @@ int offsetAmount = 30; // Set offset amount from 90 (i.e. 30 means 90 +- 30)
 int cueDisplayTime = 1000; // Memory trial type, cue show time (in ms)
 
 // BARREL MOTOR SECTION
-float rotationSpeed = 0.1; // speed of rotation (stepper step multiplier)
-int stepsPerRev = 200; // steps per revolution (set by switches on the driver DM542)
+//float rotationSpeed = 0.1; // speed of rotation (stepper step multiplier)
+int stepsPerRev = 40; // steps per revolution (set by switches on the driver DM542)
 float motorResolution = stepsPerRev/360; // Determine Motor resolution
 int stepperSpeed = 500; // stepper speed in RPM
 

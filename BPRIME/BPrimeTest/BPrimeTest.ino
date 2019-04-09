@@ -38,8 +38,8 @@ void setup()
   attachInterrupt(digitalPinToInterrupt(encoder0PinB), encInt, CHANGE);
 
   // Treat Button ALWAYS deposits a treat <------------------------------------HARD CODED INTO POSITION 0... CHANGE THIS!
-  //pinMode(treatBut, INPUT_PULLDOWN);
-  //attachInterrupt(digitalPinToInterrupt(treatBut), treatDispense, RISING);
+  pinMode(treatBut, INPUT_PULLDOWN);
+  attachInterrupt(digitalPinToInterrupt(treatBut), treatDispense, RISING);
 
   // Magnetic Sensor always records pot position when it is tripped 
   //pinMode(magSensor, INPUT_PULLDOWN);
@@ -212,7 +212,9 @@ void rotateBarrel(int currTarget) {
     potAngle = map(analogRead(potPin), 0, 1023, 0, 180);
 
       if(motorFlag){
-        moveMotor = motorDir*stepsPerRev*rotationSpeed;
+        //moveMotor = motorDir*stepsPerRev*rotationSpeed;
+        myStepper.setSpeed(stepperSpeed);
+        moveMotor = motorDir*stepsPerRev;
         myStepper.step(moveMotor);
       }
       
@@ -367,7 +369,7 @@ void spinMotor() {
 }
 
 void writeAngle(int setAngle){
-  myStepper.setSpeed(stepperSpeed/10);
+  myStepper.setSpeed(stepperSpeed);
   int potAngle = map(analogRead(potPin), 0, 1023, 0, 180);
   if(Debug){
     Serial.print("Motor position: ");
@@ -377,7 +379,7 @@ void writeAngle(int setAngle){
     potAngle = map(analogRead(potPin), 0, 1023, 0, 180);
     delay(1000);
     while((setAngle - angleRange > potAngle) && (potAngle > 0) && (potAngle < 180)){
-       myStepper.step(stepsPerRev/5);
+       myStepper.step(stepsPerRev);
        potAngle = map(analogRead(potPin), 0, 1023, 0, 180);
        if(Debug){
         cueStrip.setPixelColor(0, blue);
@@ -387,7 +389,7 @@ void writeAngle(int setAngle){
        }
     }
     while((setAngle + angleRange < potAngle) && (potAngle > 0) && (potAngle < 180)){
-      myStepper.step(-stepsPerRev/5);
+      myStepper.step(-stepsPerRev);
       potAngle = map(analogRead(potPin), 0, 1023, 0, 180);
       if(Debug){
         cueStrip.setPixelColor(0, green);
@@ -408,7 +410,7 @@ void writeAngle(int setAngle){
     }
     potAngle = map(analogRead(potPin), 0, 1023, 0, 180);
   }
-  myStepper.setSpeed(stepperSpeed);
+  //myStepper.setSpeed(stepperSpeed);
 }
 
 //Reset Motor Driver pins to default states
