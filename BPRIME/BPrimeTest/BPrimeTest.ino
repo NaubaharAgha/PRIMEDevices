@@ -229,14 +229,14 @@ int pickNewRandTarget(){
     if (Debug){
       Serial.println("Picking a new Target");
     }
-    int a[4] = {sensorRT,sensorRB,sensorLT,sensorLB};
+    int a[4] = {0,1,2,3}; // <--------------------------- HARD CODED NUMBERS IN AN ARRAY...
     // Pick current trial target
     int currTarget = a[rand() % 4];
 
     return currTarget;
 }
 
-void showCue(int targetID){
+void showCue(int targetID){ // <------------------------- Hard coded numbers in the case
  if (Debug){
   Serial.println("Showing Cue");
  }
@@ -245,19 +245,19 @@ void showCue(int targetID){
   // 2 = Left Top (LT) = Green
   // 3 = Left Bottom (LB) = Pink
   switch(targetID) {
-    case sensorRT : 
+    case 0 : 
       cueStrip.setPixelColor(1, cyan);
       cueStrip.setPixelColor(2, yellow);
       break;      
-    case sensorRB : 
+    case 1 : 
       cueStrip.setPixelColor(1, cyan);
       cueStrip.setPixelColor(2, blue);
         break;
-    case sensorLT : 
+    case 2 : 
       cueStrip.setPixelColor(1, orange);
       cueStrip.setPixelColor(2, green);
         break;     
-    case sensorLB : 
+    case 3 : 
       cueStrip.setPixelColor(1, orange);
       cueStrip.setPixelColor(2, pink);
         break;
@@ -288,7 +288,7 @@ void prepareTrial() {
 }
 
 void startTrial(int currTarget){
-  //depositReward(currTarget, numTreatstoDispense);
+  depositReward(currTarget, numTreatstoDispense);
   showCue(currTarget);
   rotateBarrel(currTarget);
 }
@@ -351,6 +351,11 @@ void depositReward(int targetNumber, int numSteps){
 
   digitalWrite(treatEnable, 1); //Disable treat motor driver
   treatCounter++;
+  if (trialType == "offset"){ 
+    angle = 90 + offsetAmount;
+  } else {
+    angle = 90; 
+  }
   writeAngle(angle);
 }
 
@@ -377,7 +382,7 @@ void writeAngle(int setAngle){
        myStepper.step(stepsPerRev);
        potAngle = map(analogRead(potPin), 0, 1023, 0, 180);
        if(Debug){
-        cueStrip.setPixelColor(0, blue);
+        cueStrip.setPixelColor(3, blue);
         cueStrip.show();
         Serial.print("Motor increasing position: ");
         Serial.println(potAngle);
@@ -387,7 +392,7 @@ void writeAngle(int setAngle){
       myStepper.step(-stepsPerRev);
       potAngle = map(analogRead(potPin), 0, 1023, 0, 180);
       if(Debug){
-        cueStrip.setPixelColor(0, green);
+        cueStrip.setPixelColor(3, green);
         cueStrip.show();
         Serial.print("Motor decreasing position: ");
         Serial.println(potAngle);
@@ -444,6 +449,11 @@ void initializePositions(){
     magnetTestFlag = 0;
   }
   myStepper.setSpeed(stepperSpeed);
+  if (trialType == "offset"){ 
+    angle = 90 + offsetAmount;
+  } else {
+    angle = 90; 
+  }
   writeAngle(angle);
 
   if (Debug){

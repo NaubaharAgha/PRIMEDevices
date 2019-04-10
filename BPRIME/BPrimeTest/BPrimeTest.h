@@ -1,7 +1,7 @@
 //---------------------------------- Experimental Parameters
 
 // DEBUG FLAG, set to 1 for Serial Output, 0 to mute output
-bool Debug = 1;
+bool Debug = 0;
 
 // RUNNING MODE:
 // S: "Standalone mode" doesn't require external input
@@ -22,7 +22,7 @@ int stepsPerRev = 20; // steps per revolution (set by switches on the driver DM5
 float motorResolution = stepsPerRev/360; // Determine Motor resolution
 int stepperSpeed = 550; // stepper speed in RPM
 
-int angleRange = 5; // Degrees of allowance for chosen angle (i.e. 90 becomes +/-5 so between 85 to 95)
+int angleRange = 3; // Degrees of allowance for chosen angle (i.e. 90 becomes +/-5 so between 85 to 95)
 
 int ITI = 1000; // Intertrial Interval in ms (time after resetting device and starting new trial)
 
@@ -30,7 +30,7 @@ int timeToWaitAfterTrigger = 3000; // Wait time after the finger sensor is trigg
 
 // TREAT MOTOR SECTION
 int numTreatstoDispense = 1; // Number of treats to dispense per dispense request (whole number)
-int stepFactor = 40*stepsPerRev; // Empirically deterimined number of motor steps to take to dispense a single treat
+int stepFactor = 50*stepsPerRev; // Empirically deterimined number of motor steps to take to dispense a single treat
 //int stepFactor = 1200;
 int treatStepperSpeed = 2*stepperSpeed;
 
