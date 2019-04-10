@@ -1,12 +1,11 @@
 //---------------------------------- Experimental Parameters
 
 // DEBUG FLAG, set to 1 for Serial Output, 0 to mute output
-bool Debug = 1;
+bool Debug = 0;
 
 // RUNNING MODE:
 // S: "Standalone mode" doesn't require external input
 // M: "Moroco mode" Waits for Moroco input to progress through the trial
-// B: "Button mode" Waits for button press input on pin 16 and manually moves the motor
 // X: "XBI mode" communicates with the XBI <---- NOT IMPLEMENTED YET! ----
 char runningMode = 'S';
 
@@ -19,12 +18,11 @@ int offsetAmount = 30; // Set offset amount from 90 (i.e. 30 means 90 +- 30)
 int cueDisplayTime = 1000; // Memory trial type, cue show time (in ms)
 
 // BARREL MOTOR SECTION
-float rotationSpeed = 0.1; // speed of rotation (stepper step multiplier)
-int stepsPerRev = 200; // steps per revolution (set by switches on the driver DM542)
+int stepsPerRev = 20; // steps per revolution (set by switches on the driver DM542)
 float motorResolution = stepsPerRev/360; // Determine Motor resolution
-int stepperSpeed = 500; // stepper speed in RPM
+int stepperSpeed = 550; // stepper speed in RPM
 
-int angleRange = 5; // Degrees of allowance for chosen angle (i.e. 90 becomes +/-5 so between 85 to 95)
+int angleRange = 3; // Degrees of allowance for chosen angle (i.e. 90 becomes +/-5 so between 85 to 95)
 
 int ITI = 1000; // Intertrial Interval in ms (time after resetting device and starting new trial)
 
@@ -32,11 +30,34 @@ int timeToWaitAfterTrigger = 3000; // Wait time after the finger sensor is trigg
 
 // TREAT MOTOR SECTION
 int numTreatstoDispense = 1; // Number of treats to dispense per dispense request (whole number)
-int stepFactor = 200; // Empirically deterimined number of motor steps to take to dispense a single treat
+int stepFactor = 50*stepsPerRev; // Empirically deterimined number of motor steps to take to dispense a single treat
+//int stepFactor = 1200;
+int treatStepperSpeed = 2*stepperSpeed;
 
 int rotationDir = 1; // Direction to rotate 1 or -1
 
 int LEDBrightness = 64; // Brightness range from 0 - 255
+
+int treatCounter = 0; // Keep track of how many treats have been dispensed (can be sent out at some point...)
+int intToSwitch = 5; // Interval to switch direction on the motor (after ever x treats, turn the opposite direction once)
+
+int magnetTestFlag = 0; // Flag initialized at 0, goes high whenever the magnetic sensor is tripped
+int magPotPosit = 0; // Store the pot position every time the magnetic sensor is tripped
+
+// Array of positions (a bit confusing, but as follows:)
+// The order from the top down anticlockwise: 5, 0, 1, 2, 3, 4
+// 0-3: the positions of the treat wells:
+  // 0 = Right Bottom (RB) = Blue
+  // 1 = Right Top (RT) = Yellow
+  // 2 = Left Top (LT) = Green
+  // 3 = Left Bottom (LB) = Pink
+// 4: position of the LEFT limit (180 deg)
+// 5: position of the RIGHT limit (0 deg)
+// Detailed Explanation: When the LEFT treat wells are facing the user, the RIGHT treat wells are directly in the back (0 degrees) [position 5]
+// As the user moves toward the center, the right treat wells move towards the right side of the user (the RIGHT treat wells move clockwise when looking top down).
+// The first treat dispenser (RB) comes up first [position 0]. Second treat dispenser (RT) comes up next  [position 1], and so on...
+// Finally, all treat dispensers pass and the RIGHT treat wells are facing the user, which means the LEFT treat wells are directly in the back (180 degrees) [position 4].
+int arrayPos [6] = { 45, 71, 104, 128, 180, 0 };  
 
 //---------------------------------- Serial Communication Protocol
 
@@ -46,9 +67,6 @@ int LEDBrightness = 64; // Brightness range from 0 - 255
 
 //---------------------------------- Pin Assignments
 
-int hardDirPin = 0;
-
-int unused11 = 12;
 int unused10 = 24;
 int unused9 = 25;
 int unused8 = 26;
@@ -60,17 +78,19 @@ int unused3 = 31;
 int unused2 = 32;
 int unused1 = 33;
 
+int hardDirPin = 0; // Switch to manually switch the rotation direction of the barrel; Default = 0;
 
+int but = 1; // Button for treat deposition position initialization (hold during startup to begin with initialization phase)
 
-const byte interruptPin = 2;
+const byte interruptPin = 2; // Interrupt for IR Sensors
 
-// Encoder and servo Pins
-int encoder0PinB = 16;
-int encoder0PinA = 17;
-
+int barrelrollLEDsPIN = 3; //Front face Left and Right indicators
 int foodwellLEDsPIN = 4; //Foodwell LEDs
 int cueLEDsPIN = 5; //Signal light cue LEDs
-int servoPin = 6; //Feeder servo
+
+int startTrialTrigger = 6; // Input to trigger start of a trial
+
+int treatBut = 7; // Button to manually dispense a treat
 
 // Need to remain constants for the rest of the code (switch statement)
 const int sensorLB = 8;
@@ -78,30 +98,37 @@ const int sensorLT = 9;
 const int sensorRT = 10;
 const int sensorRB = 11;
 
+int magSensor = 12;
+
 int boardLED = 13;
-int barrelrollLEDsPIN = 14; //Front face Left and Right indicators
 
-int startTrialTrigger = 15; //Input to trigger start of a trial
+// Feeder Stepper motor pins
+int treatDir = 14; //Treat motor direction
+int treatPulse = 15; //Feeder pulse
+int treatEnable = 16; // Treat motor enable
 
-int but = 1; //Button for manual motor rotation
+// Encoder Interrupt Pins (Need to be Analog... I think?)
+int encoder0PinA = 17;
+int encoder0PinB = 18;
 
 // Main Barrel Motor pins
-const int debug = 18;
 const int enblPin = 19;
 const int pulPin = 20;
 const int dirPin = 21;
 
-const int int2Pin = 22; //Second interrupt pin
+const int int2Pin = 22; //Second IR interrupt pin
 
 const int potPin = 23; //Pot to measure rotation of Main Barrel Motor
 
 //---------------------------------- Initialization
 
-// Initialize Servo
+// Initialize Stepper
 int startAngle = 90;
-//Servo servo_0; // servo_0 is the main barrel rotating motor
 int angle = startAngle;   // servo position in degrees 
-Stepper myStepper(stepsPerRev, 20,9,10,21);
+
+Stepper myStepper(stepsPerRev, pulPin, dirPin); // MAIN INNER BARREL STEPPER MOTOR
+
+Stepper treatStepper(stepsPerRev, treatPulse, treatDir); //SECONDARY TREAT DISPENSER STEPPER MOTOR
 
 // Initialize Encoder
 RotaryEncoder encoder(encoder0PinA, encoder0PinB);
