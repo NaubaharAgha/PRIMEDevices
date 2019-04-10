@@ -12,7 +12,7 @@ void setup()
  
   // Setup Stepper 
   myStepper.setSpeed(stepperSpeed);
-  treatStepper.setSpeed(stepperSpeed);
+  treatStepper.setSpeed(treatStepperSpeed);
   digitalWrite(treatEnable, 1); //Disable treat motor driver
   pinMode(boardLED, OUTPUT);
   pinMode(pulPin, OUTPUT);
@@ -182,20 +182,24 @@ void rotateBarrel(int currTarget) {
     int newPos = encoder.getPosition();
     if (pos != newPos) {
       if(newPos < pos){ //If new position is lower than original position, turn one direction
+        potAngle = map(analogRead(potPin), 0, 1023, 0, 180); // Determine current motor position
         if(potAngle > 1){
-          motorFlag = 1;
+          motorDir = -1*rotationDir;
+          moveMotor = motorDir*stepsPerRev;
+          myStepper.step(moveMotor);
         }
-        motorDir = -1*rotationDir;
         if (Debug){
           cueStrip.setPixelColor(2, red);
           cueStrip.show();
         }
       }
       if(newPos > pos){ //If new position is higher than original position, turn the other direction
+        potAngle = map(analogRead(potPin), 0, 1023, 0, 180); // Determine current motor position
         if(potAngle < 179){
-          motorFlag = 1;
+          motorDir = 1*rotationDir;
+          moveMotor = motorDir*stepsPerRev;
+          myStepper.step(moveMotor);
         }
-        motorDir = 1*rotationDir;
         if (Debug){
           cueStrip.setPixelColor(2, pink);
           cueStrip.show();
@@ -209,16 +213,6 @@ void rotateBarrel(int currTarget) {
       motorFlag = 0;
     }
   
-    potAngle = map(analogRead(potPin), 0, 1023, 0, 180);
-
-      if(motorFlag){
-        myStepper.setSpeed(stepperSpeed);
-        //moveMotor = motorDir*stepsPerRev*rotationSpeed;
-        moveMotor = motorDir*stepsPerRev;
-        myStepper.step(moveMotor);
-      }
-      
-      potAngle = map(analogRead(potPin), 0, 1023, 0, 180);
       delay(5);  
        
      // DEBUG: Serial output of sensors and actuators
@@ -333,9 +327,9 @@ void depositReward(int targetNumber, int numSteps){
   // 3 = Left Bottom (LB) = Pink
 // numSteps is how many treats should be delivered (less than 1 has a probability of delivering treats. 0.25 is enough not to deliver a treat.
 
-  magnetTestFlag = 0; // Prepare to flip the flag once the magnet in the correct position is detected
+  //magnetTestFlag = 0; // Prepare to flip the flag once the magnet in the correct position is detected
   
-  //writeAngle(arrayPos[targetNumber]); // Turn main barrel motor to position of "targetNumber" reward position from the arrayPos array to align for treat deposition
+  writeAngle(arrayPos[targetNumber]); // Turn main barrel motor to position of "targetNumber" reward position from the arrayPos array to align for treat deposition
 
 //  if(magnetTestFlag){  
     digitalWrite(treatEnable, 0); //Enable treat motor driver
@@ -357,6 +351,7 @@ void depositReward(int targetNumber, int numSteps){
 
   digitalWrite(treatEnable, 1); //Disable treat motor driver
   treatCounter++;
+  writeAngle(angle);
 }
 
 void spinMotor() {
@@ -378,7 +373,7 @@ void writeAngle(int setAngle){
   while((setAngle - angleRange >= potAngle) || (potAngle >= setAngle + angleRange)){
     potAngle = map(analogRead(potPin), 0, 1023, 0, 180);
     delay(1000);
-    while((setAngle - angleRange > potAngle) && (potAngle > 0) && (potAngle < 180)){
+    while((setAngle - angleRange >= potAngle) && (potAngle > 0) && (potAngle < 180)){
        myStepper.step(stepsPerRev);
        potAngle = map(analogRead(potPin), 0, 1023, 0, 180);
        if(Debug){
@@ -388,7 +383,7 @@ void writeAngle(int setAngle){
         Serial.println(potAngle);
        }
     }
-    while((setAngle + angleRange < potAngle) && (potAngle > 0) && (potAngle < 180)){
+    while((setAngle + angleRange <= potAngle) && (potAngle > 0) && (potAngle < 180)){
       myStepper.step(-stepsPerRev);
       potAngle = map(analogRead(potPin), 0, 1023, 0, 180);
       if(Debug){
@@ -491,7 +486,7 @@ void treatDispense() {
    // If interrupts come faster than 200ms, assume it's a bounce and ignore
    if (interrupt_time - last_interrupt_time > 1000) 
    {
-      depositReward(0,1);
+      depositReward(3,1);
    }
    last_interrupt_time = interrupt_time;
 }

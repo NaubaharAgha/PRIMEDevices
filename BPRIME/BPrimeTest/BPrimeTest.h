@@ -18,10 +18,9 @@ int offsetAmount = 30; // Set offset amount from 90 (i.e. 30 means 90 +- 30)
 int cueDisplayTime = 1000; // Memory trial type, cue show time (in ms)
 
 // BARREL MOTOR SECTION
-//float rotationSpeed = 0.1; // speed of rotation (stepper step multiplier)
 int stepsPerRev = 20; // steps per revolution (set by switches on the driver DM542)
 float motorResolution = stepsPerRev/360; // Determine Motor resolution
-int stepperSpeed = 500; // stepper speed in RPM
+int stepperSpeed = 550; // stepper speed in RPM
 
 int angleRange = 5; // Degrees of allowance for chosen angle (i.e. 90 becomes +/-5 so between 85 to 95)
 
@@ -31,7 +30,9 @@ int timeToWaitAfterTrigger = 3000; // Wait time after the finger sensor is trigg
 
 // TREAT MOTOR SECTION
 int numTreatstoDispense = 1; // Number of treats to dispense per dispense request (whole number)
-int stepFactor = 6*stepsPerRev; // Empirically deterimined number of motor steps to take to dispense a single treat
+int stepFactor = 40*stepsPerRev; // Empirically deterimined number of motor steps to take to dispense a single treat
+//int stepFactor = 1200;
+int treatStepperSpeed = 2*stepperSpeed;
 
 int rotationDir = 1; // Direction to rotate 1 or -1
 
@@ -56,7 +57,7 @@ int magPotPosit = 0; // Store the pot position every time the magnetic sensor is
 // As the user moves toward the center, the right treat wells move towards the right side of the user (the RIGHT treat wells move clockwise when looking top down).
 // The first treat dispenser (RB) comes up first [position 0]. Second treat dispenser (RT) comes up next  [position 1], and so on...
 // Finally, all treat dispensers pass and the RIGHT treat wells are facing the user, which means the LEFT treat wells are directly in the back (180 degrees) [position 4].
-int arrayPos [6] = { 0, 0, 0, 0, 180, 0 };  
+int arrayPos [6] = { 45, 71, 104, 128, 180, 0 };  
 
 //---------------------------------- Serial Communication Protocol
 
