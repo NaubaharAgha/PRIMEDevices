@@ -212,8 +212,8 @@ void rotateBarrel(int currTarget) {
     potAngle = map(analogRead(potPin), 0, 1023, 0, 180);
 
       if(motorFlag){
-        //moveMotor = motorDir*stepsPerRev*rotationSpeed;
         myStepper.setSpeed(stepperSpeed);
+        //moveMotor = motorDir*stepsPerRev*rotationSpeed;
         moveMotor = motorDir*stepsPerRev;
         myStepper.step(moveMotor);
       }
