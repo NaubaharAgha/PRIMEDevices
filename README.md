@@ -1,4 +1,4 @@
-# PRIMEDevices
+# PRIME Devices
 
 **PR**imate **I**nteraction **M**ovement and **E**nrichment
 
