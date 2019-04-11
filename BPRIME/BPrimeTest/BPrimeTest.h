@@ -33,6 +33,7 @@ int numTreatstoDispense = 1; // Number of treats to dispense per dispense reques
 int stepFactor = 50*stepsPerRev; // Empirically deterimined number of motor steps to take to dispense a single treat
 //int stepFactor = 1200;
 int treatStepperSpeed = 2*stepperSpeed;
+int servoAngleStep = 5; // Degrees to increment the servo per encoder tick (probably do this empirically....
 
 int rotationDir = 1; // Direction to rotate 1 or -1
 
@@ -67,6 +68,9 @@ int arrayPos [6] = { 45, 71, 104, 128, 180, 0 };
 
 //---------------------------------- Pin Assignments
 
+int unused13 = 9;
+int unused12 = 10;
+int unused11 = 11;
 int unused10 = 24;
 int unused9 = 25;
 int unused8 = 26;
@@ -92,13 +96,9 @@ int startTrialTrigger = 6; // Input to trigger start of a trial
 
 int treatBut = 7; // Button to manually dispense a treat
 
-// Need to remain constants for the rest of the code (switch statement)
-const int sensorLB = 8;
-const int sensorLT = 9;
-const int sensorRT = 10;
-const int sensorRB = 11;
+int servoControl = 8; // Control Servo (if using a Servo instead of a Stepper)
 
-int magSensor = 12;
+int magSensor = 12; // Input for the Reed Switch to verify/detect position
 
 int boardLED = 13;
 
@@ -127,6 +127,8 @@ int startAngle = 90;
 int angle = startAngle;   // servo position in degrees 
 
 Stepper myStepper(stepsPerRev, pulPin, dirPin); // MAIN INNER BARREL STEPPER MOTOR
+Servo myServo; // MAIN INNER BARREL SERVO MOTOR 
+
 
 Stepper treatStepper(stepsPerRev, treatPulse, treatDir); //SECONDARY TREAT DISPENSER STEPPER MOTOR
 

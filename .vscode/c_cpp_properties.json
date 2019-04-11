@@ -1,21 +1,20 @@
 {
     "configurations": [
         {
-            "name": "Linux",
+            "name": "Win32",
             "includePath": [
+                "D:\\Program Files (x86)\\Arduino\\tools\\**",
+                "D:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\**",
                 "${workspaceFolder}/**",
-                "/home/naubahar/Arduino/libraries/Adafruit_Neopixel",
-                "/home/naubahar/Arduino/libraries/Encoder",
-                "/home/naubahar/Desktop/arduino-1.8.8/libraries",
-                "/home/naubahar/Desktop/arduino-1.8.8/libraries/Servo/src",
-                "/home/naubahar/Desktop/arduino-1.8.8/hardware/tools/avr/avr/include",
-                "/home/naubahar/Arduino/libraries/Adafruit_NeoPixel"
+                "D:/Program Files (x86)/Arduino",
+                "D:/Program Files (x86)/Arduino/libraries",
+                "D:/Program Files (x86)/Arduino"
             ],
             "defines": [],
-            "compilerPath": "/usr/bin/cpp",
-            "cStandard": "c11",
             "cppStandard": "c++17",
-            "intelliSenseMode": "gcc-x64"
+            "forcedInclude": [
+                "D:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\cores\\arduino\\Arduino.h"
+            ]
         }
     ],
     "version": 4

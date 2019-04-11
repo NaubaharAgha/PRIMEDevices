@@ -1,4 +1,4 @@
-//#include <Servo.h>
+#include <Servo.h>
 #include <Adafruit_NeoPixel.h>
 #include <Arduino.h>
 #include <avr/io.h>
@@ -13,6 +13,8 @@ void setup()
   // Setup Stepper 
   myStepper.setSpeed(stepperSpeed);
   treatStepper.setSpeed(treatStepperSpeed);
+  myServo.attach(servoControl);
+  
   digitalWrite(treatEnable, 1); //Disable treat motor driver
   pinMode(boardLED, OUTPUT);
   pinMode(pulPin, OUTPUT);
@@ -21,10 +23,10 @@ void setup()
   resetMotorPins(); // Initialize Motor Driver pins
 
   // Set IR sensor pins as input
-  pinMode(sensorRT, INPUT);
-  pinMode(sensorRB, INPUT);
-  pinMode(sensorLT, INPUT);
-  pinMode(sensorLB, INPUT);
+//  pinMode(sensorRT, INPUT);
+//  pinMode(sensorRB, INPUT);
+//  pinMode(sensorLT, INPUT);
+//  pinMode(sensorLB, INPUT);
   
   // Set IR inputs (all go into same pin) as an interrupt
   pinMode(interruptPin, INPUT_PULLUP);
@@ -187,6 +189,7 @@ void rotateBarrel(int currTarget) {
           motorDir = -1*rotationDir;
           moveMotor = motorDir*stepsPerRev;
           myStepper.step(moveMotor);
+          myServo.write(myServo.read() + motorDir*servoAngleStep);
         }
         if (Debug){
           cueStrip.setPixelColor(2, red);
@@ -199,6 +202,7 @@ void rotateBarrel(int currTarget) {
           motorDir = 1*rotationDir;
           moveMotor = motorDir*stepsPerRev;
           myStepper.step(moveMotor);
+          myServo.write(myServo.read() + motorDir*servoAngleStep);
         }
         if (Debug){
           cueStrip.setPixelColor(2, pink);
@@ -288,7 +292,7 @@ void prepareTrial() {
 }
 
 void startTrial(int currTarget){
-  depositReward(currTarget, numTreatstoDispense);
+  //depositReward(currTarget, numTreatstoDispense);
   showCue(currTarget);
   rotateBarrel(currTarget);
 }
@@ -369,6 +373,7 @@ void spinMotor() {
 }
 
 void writeAngle(int setAngle){
+  myServo.write(setAngle);
   myStepper.setSpeed(stepperSpeed);
   int potAngle = map(analogRead(potPin), 0, 1023, 0, 180);
   if(Debug){
