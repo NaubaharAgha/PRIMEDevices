@@ -8,4 +8,6 @@ Examples:
 
 ## B-PRIME
 
+[Download Here](https://github.com/NaubaharAgha/PRIMEDevices/releases)
+
 A "smart" rotating barrel which detects direction of rotational movement and provides feedback based on this input.
