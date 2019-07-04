@@ -544,5 +544,17 @@ void dirInterrupt() {
   }else{    
     rotationDir = -1;
   }
-  
+ 
+}
+
+bool debounce(int buttonName)
+{
+  byte count = 0;
+  for(byte l = 0; l < 5; l++) {
+    if (digitalRead(buttonName) == 0)
+      count++;
+    delay(10);
+  }
+  if(count > 2)  return 1;
+  else           return 0;
 }
