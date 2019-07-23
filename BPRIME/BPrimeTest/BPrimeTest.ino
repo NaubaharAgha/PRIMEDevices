@@ -6,21 +6,22 @@
 #include <RotaryEncoder.h>
 #include <Stepper.h>
 #include "BPrimeTest.h"
+#include <SPI.h>
 
 void setup()
 {
  
   // Setup Stepper 
-  myStepper.setSpeed(stepperSpeed);
+//  myStepper.setSpeed(stepperSpeed);
   treatStepper.setSpeed(treatStepperSpeed);
-  myServo.attach(servoControl);
+//  myServo.attach(servoControl);
   
   digitalWrite(treatEnable, 1); //Disable treat motor driver
   pinMode(boardLED, OUTPUT);
   pinMode(pulPin, OUTPUT);
   pinMode(dirPin, OUTPUT);
   pinMode(enblPin, OUTPUT);
-  resetMotorPins(); // Initialize Motor Driver pins
+  //resetMotorPins(); // Initialize Motor Driver pins
 
   // Set IR sensor pins as input
 //  pinMode(sensorRT, INPUT);
@@ -36,8 +37,9 @@ void setup()
   attachInterrupt(digitalPinToInterrupt(hardDirPin), dirInterrupt, CHANGE);
 
   // Attach interrupts to the encoder pins
-  attachInterrupt(digitalPinToInterrupt(encoder0PinA), encInt, CHANGE);
-  attachInterrupt(digitalPinToInterrupt(encoder0PinB), encInt, CHANGE);
+  //attachInterrupt(digitalPinToInterrupt(encoder0PinA), encInt, CHANGE);
+  //attachInterrupt(digitalPinToInterrupt(encoder0PinB), encInt, CHANGE);
+  int pos = encoder.getPosition(); // initalize encoder position
 
   // Treat Button ALWAYS deposits a treat <------------------------------------HARD CODED INTO POSITION 0... CHANGE THIS!
   pinMode(treatBut, INPUT_PULLDOWN);
@@ -78,6 +80,8 @@ void setup()
   foodwellStrip.setPixelColor(3, yellow);
   foodwellStrip.show();
 
+  pinMode(CS, OUTPUT);
+  SPI.begin();
   Serial.begin(9600);
   if (Debug){
     Serial.println("Setup");
@@ -168,7 +172,11 @@ void rotateBarrel(int currTarget) {
   }
   cueStrip.setPixelColor(0, green);
   cueStrip.show();
-  digitalWrite(boardLED, HIGH);
+
+  digitalWrite(enblPin, HIGH);
+  attachInterrupt(digitalPinToInterrupt(encoder0PinA), encInt, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(encoder0PinB), encInt, CHANGE);
+  
   keepRunning = true; // This is overwritten by an interrupt
  // Keep allowing the barrel to move until the food well is accessed
   while(keepRunning){
@@ -176,10 +184,56 @@ void rotateBarrel(int currTarget) {
     int motorDir = 1; // set default motor direction to increasing
 
     // Set default position as 0
-    static int pos = 0;
+    //static int pos = 0;
     static int motorFlag = 0;
-    int moveMotor = 0;
-    
+    //int moveMotor = 0;
+    long Time1 = 0;
+    long Time2 = 0;
+    long Time3 = 0;
+
+    // Variable initialization
+    Time1 = millis();
+    Time3 = Time1 -= Time2;
+
+    if (Time3 >= encRes)
+    {
+      Time2 = millis ();
+      int PulsSpeed = Encoder_Count;
+      Encoder_Count = 0;
+      
+      speednum = map(constrain(PulsSpeed,0,encTimeUpperLim), 0, encTimeUpperLim, 0, upperSpeedLim);
+  
+      smoothedVal = smooth(speednum, smoothedVal);
+
+      if(digitalRead(dirPin)){
+        potAngle = map(analogRead(potPin), 0, 1023, 0, 180);
+        if(potAngle > 0){
+          motorFlag = 1;
+        } else if(potAngle <= 0){
+          motorFlag = 0;
+        }
+      }else if(!digitalRead(dirPin)){
+        potAngle = map(analogRead(potPin), 0, 1023, 0, 180);
+        if(potAngle < 180){
+          motorFlag = 1;
+        } else if(potAngle >= 180){
+          motorFlag = 0;
+        }
+      }
+      
+      if(motorFlag == 1){
+          //if(smoothedVal <= minMoveStateLimit){
+          //  moveMotor(speednum);
+            //Serial.println("instant mode"); 
+          //}
+          //else {
+            moveMotor(smoothedVal);
+            //Serial.println("smoothed mode");
+          //}
+      }
+    }
+
+    /* OLD STEPPER MOTOR CONTROL VIA POSITION COMMAND
     // Read current encoder position
     int newPos = encoder.getPosition();
     if (pos != newPos) {
@@ -216,6 +270,7 @@ void rotateBarrel(int currTarget) {
     }else{
       motorFlag = 0;
     }
+    */
   
       delay(5);  
        
@@ -224,9 +279,13 @@ void rotateBarrel(int currTarget) {
          Serial.print ("Motor Angle: ");
          Serial.print (potAngle);
          Serial.print (", Motor: ");
-         Serial.println (moveMotor);
+         Serial.println (speednum);
       }
+      speednum = 0;
   }
+  //digitalWrite(enblPin, LOW);
+  detachInterrupt(digitalPinToInterrupt(encoder0PinA));
+  detachInterrupt(digitalPinToInterrupt(encoder0PinB));
 }
 
 int pickNewRandTarget(){
@@ -372,9 +431,25 @@ void spinMotor() {
   }
 }
 
+// MOVE MOTOR BY A SPECIFIC SPEED (SPEED COMMAND)
+// Output analog speed command via voltage over a digital potentiometer
+int moveMotor(int value)
+{
+  digitalWrite(CS, LOW);
+  SPI.transfer(address);
+  SPI.transfer(value);
+  digitalWrite(CS, HIGH);
+}
+
 void writeAngle(int setAngle){
-  myServo.write(setAngle);
-  myStepper.setSpeed(stepperSpeed);
+  Serial.println("Hi, we're in writeAngle");
+}
+
+// MOVE MOTOR TO A SPECIFIC POT ANGLE (AT DEFAULT SPEED)
+void writeAngle_BAK(int setAngle){
+  digitalWrite(enblPin, HIGH);
+  //myServo.write(setAngle);
+  //myStepper.setSpeed(stepperSpeed);
   int potAngle = map(analogRead(potPin), 0, 1023, 0, 180);
   if(Debug){
     Serial.print("Motor position: ");
@@ -382,9 +457,11 @@ void writeAngle(int setAngle){
   }
   while((setAngle - angleRange >= potAngle) || (potAngle >= setAngle + angleRange)){
     potAngle = map(analogRead(potPin), 0, 1023, 0, 180);
-    delay(1000);
-    while((setAngle - angleRange >= potAngle) && (potAngle > 0) && (potAngle < 180)){
-       myStepper.step(stepsPerRev);
+    delay(500);
+    while((setAngle - angleRange >= potAngle) && (potAngle > 0) && (potAngle < 180)){ // If set angle is Higher than Pot Angle, move motor LOWER
+       //myStepper.step(stepsPerRev); // MOVE THE ACTUAL MOTOR HERE (POSITIVE)
+       digitalWrite(dirPin, LOW);
+       moveMotor(defMotorMoveSpeed);
        potAngle = map(analogRead(potPin), 0, 1023, 0, 180);
        if(Debug){
         cueStrip.setPixelColor(3, blue);
@@ -393,8 +470,10 @@ void writeAngle(int setAngle){
         Serial.println(potAngle);
        }
     }
-    while((setAngle + angleRange <= potAngle) && (potAngle > 0) && (potAngle < 180)){
-      myStepper.step(-stepsPerRev);
+    while((setAngle + angleRange <= potAngle) && (potAngle > 0) && (potAngle < 180)){ // If set angle is Lower than Pot Angle, move motor HIGHER
+      //myStepper.step(-stepsPerRev); // MOVE THE ACTUAL MOTOR HERE (NEGATIVE)
+      digitalWrite(dirPin, HIGH);
+      moveMotor(defMotorMoveSpeed);
       potAngle = map(analogRead(potPin), 0, 1023, 0, 180);
       if(Debug){
         cueStrip.setPixelColor(3, green);
@@ -404,18 +483,22 @@ void writeAngle(int setAngle){
        }
     }
     if(potAngle >= 180){
-      myStepper.step(-stepsPerRev);
+      digitalWrite(dirPin, HIGH);
+      moveMotor(defMotorMoveSpeed);
     }
     if(potAngle <= 0){
-      myStepper.step(stepsPerRev);
+      digitalWrite(dirPin, LOW);
+      moveMotor(defMotorMoveSpeed);
     }
     if(Debug){
       Serial.print("I'm stuck here: ");
       Serial.println(potAngle);
+      Serial.print(digitalRead(dirPin));
     }
     potAngle = map(analogRead(potPin), 0, 1023, 0, 180);
   }
   //myStepper.setSpeed(stepperSpeed);
+  //digitalWrite(enblPin, LOW);
 }
 
 //Reset Motor Driver pins to default states
@@ -431,7 +514,7 @@ void resetMotorPins(){
     Serial.println ("Initializing Motor Driver");
   }
   delay(300);
-  digitalWrite(enblPin, HIGH);
+  //digitalWrite(enblPin, HIGH);
   delay(100);
   digitalWrite(enblPin, LOW);
   
@@ -474,7 +557,7 @@ void fingerInside(char fingerState){
         Serial.println ("Finger still inside. Motor detached, while loop.");
       }
       while(!digitalRead(interruptPin) || !digitalRead(int2Pin)){
-        digitalWrite(enblPin, 1); //Disable motor driver
+        digitalWrite(enblPin, 0); //Disable motor driver
         cueStrip.setPixelColor(0, red);
         cueStrip.setPixelColor(1, off);
         cueStrip.setPixelColor(2, off);
@@ -486,7 +569,7 @@ void fingerInside(char fingerState){
         Serial.println ("Finger removed. Motor reattached.");
       }
       delay(timeToWaitAfterTrigger);
-      digitalWrite(enblPin, 0); // Enable motor driver
+      digitalWrite(enblPin, 1); // Enable motor driver
       resetDevice();
       if (Debug){
         Serial.println ("Waiting for ready signal.");
@@ -511,7 +594,7 @@ void sensorInterrupt() {
   if (Debug){
     Serial.println ("IR sensor tripped!");
   }
-  digitalWrite(enblPin, 1); //Disable motor driver
+  digitalWrite(enblPin, 0); //Disable motor driver
   cueStrip.setPixelColor(0, red);
   cueStrip.show();
   keepRunning = false;
@@ -526,7 +609,23 @@ void sensorInterrupt() {
 
 // This routine will only be called on any signal change on encoder pins: exactly where we need to check.
 void encInt(){
-     encoder.tick(); // just call tick() to check the state.
+  encoder.tick(); // just call tick() to check the state.
+  Encoder_Count++;
+  if (Debug){
+    //Serial.println("EncInt");
+  }
+  int newPos = encoder.getPosition();
+  if (pos != newPos) {
+      if(newPos < pos){
+        rotationDir = -1;
+        digitalWrite(dirPin, LOW);
+      }
+      else if(newPos > pos){
+        rotationDir = 1;
+        digitalWrite(dirPin, HIGH);
+      }
+  }
+  pos = newPos;
 }
 
 void magTripped(){
@@ -545,6 +644,10 @@ void dirInterrupt() {
     rotationDir = -1;
   }
  
+}
+
+float smooth(int t_rawVal, float t_smoothedVal) {
+    return  t_smoothedVal + ((t_rawVal - t_smoothedVal) + 0.5) / smoothStrength;  // +0.5 for rounding
 }
 
 bool debounce(int buttonName)

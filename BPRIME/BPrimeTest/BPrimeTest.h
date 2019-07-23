@@ -1,7 +1,7 @@
 //---------------------------------- Experimental Parameters
 
 // DEBUG FLAG, set to 1 for Serial Output, 0 to mute output
-bool Debug = 0;
+bool Debug = 1;
 
 // RUNNING MODE:
 // S: "Standalone mode" doesn't require external input
@@ -14,19 +14,36 @@ char runningMode = 'S';
 // "memory": cue turns off after "cueDisplayTime" milliseconds
 // "offset": device starts off center by "offsetAmount"
 String trialType = "normal";
-int offsetAmount = 30; // Set offset amount from 90 (i.e. 30 means 90 +- 30) 
+int offsetAmount = 0; // Set offset amount from 90 (i.e. 30 means 90 +- 30) 
 int cueDisplayTime = 1000; // Memory trial type, cue show time (in ms)
-
-// BARREL MOTOR SECTION
-int stepsPerRev = 20; // steps per revolution (set by switches on the driver DM542)
-float motorResolution = stepsPerRev/360; // Determine Motor resolution
-int stepperSpeed = 550; // stepper speed in RPM
 
 int angleRange = 3; // Degrees of allowance for chosen angle (i.e. 90 becomes +/-5 so between 85 to 95)
 
 int ITI = 1000; // Intertrial Interval in ms (time after resetting device and starting new trial)
 
 int timeToWaitAfterTrigger = 3000; // Wait time after the finger sensor is triggered (in ms)
+
+// BARREL MOTOR SECTION
+// - NOT USED IN THIS MODE. SEE NANOPRO SOFTWARE TO CONFIGURE MOTOR VIA THE SMC133-2 DRIVER
+int stepsPerRev = 20; // steps per revolution (set by switches on the driver DM542)
+float motorResolution = stepsPerRev/360; // Determine Motor resolution
+int stepperSpeed = 550; // stepper speed in RPM
+
+int upperSpeedLim = 15; // Upper limit of motor speed (from 0 - 128)
+int speednum = 0;
+int defMotorMoveSpeed = 5; // Default speed to move motor (automatically, such as after a task or to find start position)
+
+// SMOOTHING - Main Barrel command
+float smoothedVal = 0.0;                // sensor smoothed value
+float smoothStrength = 3;               // amount of smoothing (default 10)
+int minMoveStateLimit = 5;              // threshold to switch from direct to smoothed control
+
+// ROTARY ENCODER SECTION
+int pos = 0;
+int Encoder_Count = 0;
+int encPos = 0;
+int encTimeUpperLim = 1000; //Upper limit of time (ms) value between enc ticks to be considered for speed calculations (beyond this value, speed is 0)
+int encRes = 10; //How often to read encoder value (ms)
 
 // TREAT MOTOR SECTION
 int numTreatstoDispense = 1; // Number of treats to dispense per dispense request (whole number)
@@ -37,10 +54,10 @@ int servoAngleStep = 5; // Degrees to increment the servo per encoder tick (prob
 
 int rotationDir = 1; // Direction to rotate 1 or -1
 
-int LEDBrightness = 64; // Brightness range from 0 - 255
+int LEDBrightness = 64; // Brightness range from 0 - 255 (controls all LEDs together)
 
 int treatCounter = 0; // Keep track of how many treats have been dispensed (can be sent out at some point...)
-int intToSwitch = 5; // Interval to switch direction on the motor (after ever x treats, turn the opposite direction once)
+int intToSwitch = 5; // Interval to switch direction on the treat motor (after ever x treats, turn the opposite direction once)
 
 int magnetTestFlag = 0; // Flag initialized at 0, goes high whenever the magnetic sensor is tripped
 int magPotPosit = 0; // Store the pot position every time the magnetic sensor is tripped
@@ -68,9 +85,6 @@ int arrayPos [6] = { 45, 71, 104, 128, 180, 0 };
 
 //---------------------------------- Pin Assignments
 
-int unused13 = 9;
-int unused12 = 10;
-int unused11 = 11;
 int unused10 = 24;
 int unused9 = 25;
 int unused8 = 26;
@@ -98,9 +112,13 @@ int treatBut = 7; // Button to manually dispense a treat
 
 int servoControl = 8; // Control Servo (if using a Servo instead of a Stepper)
 
-int magSensor = 12; // Input for the Reed Switch to verify/detect position
+int magSensor = 9; // Input for the Reed Switch to verify/detect position
 
-int boardLED = 13;
+// SPI command pins
+int CS = 10; // SS/CS - SPI bus
+int MOSIPin = 11; // MOSI - SPI bus
+int MISOPIN = 12; // MISO - SPI bus
+int boardLED = 13; // SCK - SPI bus/board LED
 
 // Feeder Stepper motor pins
 int treatDir = 14; //Treat motor direction
@@ -129,6 +147,8 @@ int angle = startAngle;   // servo position in degrees
 Stepper myStepper(stepsPerRev, pulPin, dirPin); // MAIN INNER BARREL STEPPER MOTOR
 Servo myServo; // MAIN INNER BARREL SERVO MOTOR 
 
+// SPI DEVICES
+byte address = 0x00;
 
 Stepper treatStepper(stepsPerRev, treatPulse, treatDir); //SECONDARY TREAT DISPENSER STEPPER MOTOR
 
