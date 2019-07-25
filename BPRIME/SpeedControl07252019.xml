@@ -1,0 +1,1060 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotorSettingsFile xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SerialPortSettings>
+    <BaudRate>115200</BaudRate>
+    <PortName>COM10</PortName>
+    <ReadTimeout>1000</ReadTimeout>
+    <WriteTimeout>1000</WriteTimeout>
+  </SerialPortSettings>
+  <MotorSettings>
+    <MotorSetting>
+      <MotorAddress>1</MotorAddress>
+      <ClosedLoopSetting>
+        <MotorType>Default</MotorType>
+        <ClosedLoopEnable>0</ClosedLoopEnable>
+        <PositionWindow>1</PositionWindow>
+        <PositionWindowTime>100</PositionWindowTime>
+        <FollowingErrorWindow>100</FollowingErrorWindow>
+        <FollowingErrorTimeout>250</FollowingErrorTimeout>
+        <SpeedErrorWindow>300</SpeedErrorWindow>
+        <SpeedErrorTimeout>250</SpeedErrorTimeout>
+        <KP_v_Z>1</KP_v_Z>
+        <KP_v_N>2</KP_v_N>
+        <KI_v_Z>1</KI_v_Z>
+        <KI_v_N>4</KI_v_N>
+        <KD_v_Z>0</KD_v_Z>
+        <KD_v_N>0</KD_v_N>
+        <KP_s_Z>100</KP_s_Z>
+        <KP_s_N>0</KP_s_N>
+        <KI_s_Z>15</KI_s_Z>
+        <KI_s_N>3</KI_s_N>
+        <KD_s_Z>150</KD_s_Z>
+        <KD_s_N>0</KD_s_N>
+        <KP_csv_Z>0</KP_csv_Z>
+        <KP_csv_N>0</KP_csv_N>
+        <KI_csv_Z>1</KI_csv_Z>
+        <KI_csv_N>6</KI_csv_N>
+        <KD_csv_Z>0</KD_csv_Z>
+        <KD_csv_N>0</KD_csv_N>
+        <KP_css_Z>100</KP_css_Z>
+        <KP_css_N>0</KP_css_N>
+        <KI_css_Z>10</KI_css_Z>
+        <KI_css_N>0</KI_css_N>
+        <KD_css_Z>300</KD_css_Z>
+        <KD_css_N>0</KD_css_N>
+      </ClosedLoopSetting>
+      <MotorTypeSetting>
+        <MotorID>0</MotorID>
+        <MotorType>Default</MotorType>
+        <MotorBezeichnung>Default</MotorBezeichnung>
+        <WiringType>Serial</WiringType>
+        <Design>Stepper_Motor</Design>
+        <Polepairs>50</Polepairs>
+        <HallMode>2371605</HallMode>
+        <LoadAngle>
+          <int>16384</int>
+          <int>18384</int>
+          <int>20384</int>
+          <int>22384</int>
+          <int>24384</int>
+          <int>26384</int>
+          <int>28384</int>
+        </LoadAngle>
+        <NodeDistance>4096</NodeDistance>
+        <MaxCurrent>5.5</MaxCurrent>
+        <CalibrationCurrent>4.5</CalibrationCurrent>
+        <ImagePath>""</ImagePath>
+      </MotorTypeSetting>
+      <ControllerSetting>
+        <ControllerType>SMCI33</ControllerType>
+        <MotorType>SMCI33</MotorType>
+        <Name>SMCI</Name>
+        <Type>33</Type>
+        <Schnittstelle>RS485</Schnittstelle>
+        <ClosedLoop>true</ClosedLoop>
+        <ScopeFunction>true</ScopeFunction>
+        <RampTypes>true</RampTypes>
+        <VM>true</VM>
+        <PI>false</PI>
+        <BLDC>false</BLDC>
+        <HallInput />
+        <Output>3</Output>
+        <Input>6</Input>
+        <AnaloqueInput>0</AnaloqueInput>
+        <ExternalBrake>true</ExternalBrake>
+        <RotationEncoder>
+          <string>192</string>
+          <string>200</string>
+          <string>256</string>
+          <string>400</string>
+          <string>500</string>
+          <string>512</string>
+          <string>1000</string>
+          <string>1024</string>
+          <string>2000</string>
+          <string>2048</string>
+          <string>4000</string>
+          <string>4096</string>
+        </RotationEncoder>
+        <CanBus>false</CanBus>
+        <VersionDate>11-12-2014</VersionDate>
+        <MaxMotorCurrent>2</MaxMotorCurrent>
+      </ControllerSetting>
+      <InitFromFile>false</InitFromFile>
+      <DisplaySettings>
+        <DistanceUnit>Steps</DistanceUnit>
+        <SpeedUnit>Hertz</SpeedUnit>
+        <CounterReadingUnit>Steps</CounterReadingUnit>
+        <TimeUnit>Millisecond</TimeUnit>
+        <ReverseClearance>0</ReverseClearance>
+        <FeedRate>1</FeedRate>
+        <FeedRateEnable>false</FeedRateEnable>
+        <GearReductionEnable>false</GearReductionEnable>
+        <GearReduction>1</GearReduction>
+        <StepMode>Sixty4thStep</StepMode>
+        <motorDesign>Stepper_Motor</motorDesign>
+        <PolePairs>50</PolePairs>
+        <FeedConst>2000</FeedConst>
+        <PositionPolling>200</PositionPolling>
+      </DisplaySettings>
+      <CommissioningSettings>
+        <PLow>1</PLow>
+        <PHigh>1</PHigh>
+        <PScale>58</PScale>
+        <ILow>1</ILow>
+        <IHigh>1</IHigh>
+        <IScale>200</IScale>
+        <BrakeTA>1</BrakeTA>
+        <BrakeTB>1</BrakeTB>
+        <BrakeTC>1</BrakeTC>
+        <RotencInc>500</RotencInc>
+        <Filter>0</Filter>
+        <DebounceTime>20</DebounceTime>
+        <LowerBarrier>0</LowerBarrier>
+        <UpperBarrier>5</UpperBarrier>
+        <Play>1</Play>
+        <RotationDirectionMode>Disable</RotationDirectionMode>
+        <ReverseEncoderRotatingDirection>false</ReverseEncoderRotatingDirection>
+        <FinalySendStatus>false</FinalySendStatus>
+        <ErrorCorrectionRecordNumber>0</ErrorCorrectionRecordNumber>
+        <EnableSpeedMonitoring>false</EnableSpeedMonitoring>
+        <EnableAutomaticErrorCorrection>false</EnableAutomaticErrorCorrection>
+        <SwingOutTimeMinimum>0</SwingOutTimeMinimum>
+        <SwingOutTimeMaximum>2500</SwingOutTimeMaximum>
+        <SwingOutTimeInterval>10</SwingOutTimeInterval>
+        <SwingOutTimeValue>80</SwingOutTimeValue>
+        <ToleranceWidthMinimum>0</ToleranceWidthMinimum>
+        <ToleranceWidthMaximum>250</ToleranceWidthMaximum>
+        <ToleranceWidthValue>2</ToleranceWidthValue>
+        <PhaseCurrent>50</PhaseCurrent>
+        <CurrentReduction>20</CurrentReduction>
+        <ReverseClearance>0</ReverseClearance>
+        <StepMode>Sixty4thStep</StepMode>
+        <OldStepMode>Sixty4thStep</OldStepMode>
+        <OldFeedConst>2000</OldFeedConst>
+        <OldGearFactor>15</OldGearFactor>
+        <QuickStoppRamp>0</QuickStoppRamp>
+        <motorDesign>Stepper_Motor</motorDesign>
+        <WiringType>Serial</WiringType>
+        <MotorID>0</MotorID>
+        <PolePairs>50</PolePairs>
+        <HallMode>2371605</HallMode>
+        <ClockInterpolated>320</ClockInterpolated>
+        <LoadAngle>
+          <int>16384</int>
+          <int>17000</int>
+          <int>17500</int>
+          <int>17750</int>
+          <int>18000</int>
+          <int>18000</int>
+          <int>18000</int>
+        </LoadAngle>
+        <NodeDistance>4096</NodeDistance>
+        <PosCNTOffset>0</PosCNTOffset>
+        <CascStart>327680</CascStart>
+        <CascStop>512</CascStop>
+        <FeedConstNum>0</FeedConstNum>
+        <FeedConstDenum>0</FeedConstDenum>
+        <GearNum>15</GearNum>
+        <GearDenum>1</GearDenum>
+        <CurrentPeak>0</CurrentPeak>
+        <CurrentTime>0</CurrentTime>
+        <AutoStartProgrammingLanguage>false</AutoStartProgrammingLanguage>
+        <SpeedmodeControlTypeValue>VelocityLoop</SpeedmodeControlTypeValue>
+        <Encodertype>Incremental_with_Index</Encodertype>
+        <Input1SelectionValue>Direction</Input1SelectionValue>
+        <Input2SelectionValue>SelectRec_Bit0</Input2SelectionValue>
+        <Input3SelectionValue>None</Input3SelectionValue>
+        <Input4SelectionValue>None</Input4SelectionValue>
+        <Input5SelectionValue>None</Input5SelectionValue>
+        <Input6SelectionValue>StartDrive</Input6SelectionValue>
+        <Input7SelectionValue>None</Input7SelectionValue>
+        <Input8SelectionValue>None</Input8SelectionValue>
+        <Output1SelectionValue>Ready</Output1SelectionValue>
+        <Output2SelectionValue>Ready</Output2SelectionValue>
+        <Output3SelectionValue>Running</Output3SelectionValue>
+        <Output4SelectionValue>None</Output4SelectionValue>
+        <Output5SelectionValue>None</Output5SelectionValue>
+        <Output6SelectionValue>None</Output6SelectionValue>
+        <Output7SelectionValue>None</Output7SelectionValue>
+        <Output8SelectionValue>None</Output8SelectionValue>
+        <InputMask>
+          <boolean>true</boolean>
+          <boolean>true</boolean>
+          <boolean>true</boolean>
+          <boolean>true</boolean>
+          <boolean>true</boolean>
+          <boolean>true</boolean>
+          <boolean>false</boolean>
+          <boolean>false</boolean>
+        </InputMask>
+        <InputMaskEdge>
+          <boolean>true</boolean>
+          <boolean>true</boolean>
+          <boolean>true</boolean>
+          <boolean>true</boolean>
+          <boolean>true</boolean>
+          <boolean>true</boolean>
+          <boolean>false</boolean>
+          <boolean>false</boolean>
+        </InputMaskEdge>
+        <Input>
+          <boolean>false</boolean>
+          <boolean>false</boolean>
+          <boolean>false</boolean>
+          <boolean>false</boolean>
+          <boolean>false</boolean>
+          <boolean>false</boolean>
+          <boolean>false</boolean>
+          <boolean>false</boolean>
+        </Input>
+        <OutputMask>
+          <boolean>true</boolean>
+          <boolean>true</boolean>
+          <boolean>true</boolean>
+          <boolean>false</boolean>
+          <boolean>false</boolean>
+          <boolean>false</boolean>
+          <boolean>false</boolean>
+          <boolean>false</boolean>
+        </OutputMask>
+        <OutputMaskEdge>
+          <boolean>true</boolean>
+          <boolean>true</boolean>
+          <boolean>true</boolean>
+          <boolean>false</boolean>
+          <boolean>false</boolean>
+          <boolean>false</boolean>
+          <boolean>false</boolean>
+          <boolean>false</boolean>
+        </OutputMaskEdge>
+        <Output>
+          <boolean>false</boolean>
+          <boolean>false</boolean>
+          <boolean>false</boolean>
+          <boolean>false</boolean>
+          <boolean>false</boolean>
+          <boolean>false</boolean>
+          <boolean>false</boolean>
+          <boolean>false</boolean>
+        </Output>
+      </CommissioningSettings>
+      <CommunicationSettings>
+        <BaudRate_Seriell>115200</BaudRate_Seriell>
+        <BaudRate_Motor>115200</BaudRate_Motor>
+        <UseCRC>false</UseCRC>
+        <PortName>COM10</PortName>
+        <ReadTimeout>2000</ReadTimeout>
+        <WriteTimeout>2000</WriteTimeout>
+        <SerialPortSettings>
+          <BaudRate>115200</BaudRate>
+          <PortName>COM10</PortName>
+          <ReadTimeout>2000</ReadTimeout>
+          <WriteTimeout>2000</WriteTimeout>
+        </SerialPortSettings>
+      </CommunicationSettings>
+      <InternalLimitSwitchSettings>
+        <LimitSwitchType>Closer</LimitSwitchType>
+        <ReferenceRunBehavior>FreeBackwards</ReferenceRunBehavior>
+        <NormalRunBehavior>Disable</NormalRunBehavior>
+        <IsInternal>true</IsInternal>
+      </InternalLimitSwitchSettings>
+      <ExternalLimitSwitchSettings>
+        <LimitSwitchType>Closer</LimitSwitchType>
+        <ReferenceRunBehavior>FreeBackwards</ReferenceRunBehavior>
+        <NormalRunBehavior>Disable</NormalRunBehavior>
+        <IsInternal>false</IsInternal>
+      </ExternalLimitSwitchSettings>
+      <OperationsList>
+        <Operation>
+          <OperationType xsi:type="AnalogueSpeedOperationType">
+            <RampType xsi:type="SinusRampType" />
+          </OperationType>
+          <OperationMode xsi:type="OperationMode" />
+          <ActiveFrequency>0</ActiveFrequency>
+          <Direction>Left</Direction>
+          <ChangeDirection>false</ChangeDirection>
+          <StartFrequency>640</StartFrequency>
+          <NormalFrequency>10000</NormalFrequency>
+          <MaximumFrequency>1000</MaximumFrequency>
+          <Ramp>201</Ramp>
+          <Jerk>1</Jerk>
+          <BrakeRamp>201</BrakeRamp>
+          <BrakeJerk>0</BrakeJerk>
+          <RampType xsi:type="SinusRampType" />
+          <Steps>400</Steps>
+          <NumberOfPasses>1</NumberOfPasses>
+          <Break>0</Break>
+          <NumberOfOperation>0</NumberOfOperation>
+          <NumberOfNextOperation xsi:nil="true" />
+          <GearReduction>1</GearReduction>
+          <GearReductionEnable>false</GearReductionEnable>
+        </Operation>
+        <Operation>
+          <OperationType xsi:type="AnalogueSpeedOperationType">
+            <RampType xsi:type="SinusRampType" />
+          </OperationType>
+          <OperationMode xsi:type="OperationMode" />
+          <ActiveFrequency>0</ActiveFrequency>
+          <Direction>Right</Direction>
+          <ChangeDirection>false</ChangeDirection>
+          <StartFrequency>640</StartFrequency>
+          <NormalFrequency>10000</NormalFrequency>
+          <MaximumFrequency>1000</MaximumFrequency>
+          <Ramp>200</Ramp>
+          <Jerk>1</Jerk>
+          <BrakeRamp>200</BrakeRamp>
+          <BrakeJerk>0</BrakeJerk>
+          <RampType xsi:type="SinusRampType" />
+          <Steps>400</Steps>
+          <NumberOfPasses>1</NumberOfPasses>
+          <Break>0</Break>
+          <NumberOfOperation>1</NumberOfOperation>
+          <NumberOfNextOperation xsi:nil="true" />
+          <GearReduction>1</GearReduction>
+          <GearReductionEnable>false</GearReductionEnable>
+        </Operation>
+        <Operation>
+          <OperationType xsi:type="RelativeOperationType">
+            <RampType xsi:type="SinusRampType" />
+          </OperationType>
+          <OperationMode xsi:type="OperationMode" />
+          <ActiveFrequency>0</ActiveFrequency>
+          <Direction>Left</Direction>
+          <ChangeDirection>false</ChangeDirection>
+          <StartFrequency>640</StartFrequency>
+          <NormalFrequency>4266</NormalFrequency>
+          <MaximumFrequency>1000</MaximumFrequency>
+          <Ramp>200</Ramp>
+          <Jerk>1</Jerk>
+          <BrakeRamp>0</BrakeRamp>
+          <BrakeJerk>0</BrakeJerk>
+          <RampType xsi:type="SinusRampType" />
+          <Steps>1706</Steps>
+          <NumberOfPasses>1</NumberOfPasses>
+          <Break>0</Break>
+          <NumberOfOperation>2</NumberOfOperation>
+          <NumberOfNextOperation xsi:nil="true" />
+          <GearReduction>1</GearReduction>
+          <GearReductionEnable>false</GearReductionEnable>
+        </Operation>
+        <Operation>
+          <OperationType xsi:type="RelativeOperationType">
+            <RampType xsi:type="SinusRampType" />
+          </OperationType>
+          <OperationMode xsi:type="OperationMode" />
+          <ActiveFrequency>0</ActiveFrequency>
+          <Direction>Left</Direction>
+          <ChangeDirection>false</ChangeDirection>
+          <StartFrequency>640</StartFrequency>
+          <NormalFrequency>4266</NormalFrequency>
+          <MaximumFrequency>1000</MaximumFrequency>
+          <Ramp>200</Ramp>
+          <Jerk>1</Jerk>
+          <BrakeRamp>0</BrakeRamp>
+          <BrakeJerk>0</BrakeJerk>
+          <RampType xsi:type="SinusRampType" />
+          <Steps>1706</Steps>
+          <NumberOfPasses>1</NumberOfPasses>
+          <Break>0</Break>
+          <NumberOfOperation>3</NumberOfOperation>
+          <NumberOfNextOperation xsi:nil="true" />
+          <GearReduction>1</GearReduction>
+          <GearReductionEnable>false</GearReductionEnable>
+        </Operation>
+        <Operation>
+          <OperationType xsi:type="RelativeOperationType">
+            <RampType xsi:type="SinusRampType" />
+          </OperationType>
+          <OperationMode xsi:type="OperationMode" />
+          <ActiveFrequency>0</ActiveFrequency>
+          <Direction>Left</Direction>
+          <ChangeDirection>false</ChangeDirection>
+          <StartFrequency>640</StartFrequency>
+          <NormalFrequency>4266</NormalFrequency>
+          <MaximumFrequency>1000</MaximumFrequency>
+          <Ramp>200</Ramp>
+          <Jerk>1</Jerk>
+          <BrakeRamp>0</BrakeRamp>
+          <BrakeJerk>0</BrakeJerk>
+          <RampType xsi:type="SinusRampType" />
+          <Steps>1706</Steps>
+          <NumberOfPasses>1</NumberOfPasses>
+          <Break>0</Break>
+          <NumberOfOperation>4</NumberOfOperation>
+          <NumberOfNextOperation xsi:nil="true" />
+          <GearReduction>1</GearReduction>
+          <GearReductionEnable>false</GearReductionEnable>
+        </Operation>
+        <Operation>
+          <OperationType xsi:type="RelativeOperationType">
+            <RampType xsi:type="SinusRampType" />
+          </OperationType>
+          <OperationMode xsi:type="OperationMode" />
+          <ActiveFrequency>0</ActiveFrequency>
+          <Direction>Left</Direction>
+          <ChangeDirection>false</ChangeDirection>
+          <StartFrequency>640</StartFrequency>
+          <NormalFrequency>4266</NormalFrequency>
+          <MaximumFrequency>1000</MaximumFrequency>
+          <Ramp>200</Ramp>
+          <Jerk>1</Jerk>
+          <BrakeRamp>0</BrakeRamp>
+          <BrakeJerk>0</BrakeJerk>
+          <RampType xsi:type="SinusRampType" />
+          <Steps>1706</Steps>
+          <NumberOfPasses>1</NumberOfPasses>
+          <Break>0</Break>
+          <NumberOfOperation>5</NumberOfOperation>
+          <NumberOfNextOperation xsi:nil="true" />
+          <GearReduction>1</GearReduction>
+          <GearReductionEnable>false</GearReductionEnable>
+        </Operation>
+        <Operation>
+          <OperationType xsi:type="RelativeOperationType">
+            <RampType xsi:type="SinusRampType" />
+          </OperationType>
+          <OperationMode xsi:type="OperationMode" />
+          <ActiveFrequency>0</ActiveFrequency>
+          <Direction>Left</Direction>
+          <ChangeDirection>false</ChangeDirection>
+          <StartFrequency>640</StartFrequency>
+          <NormalFrequency>4266</NormalFrequency>
+          <MaximumFrequency>1000</MaximumFrequency>
+          <Ramp>200</Ramp>
+          <Jerk>1</Jerk>
+          <BrakeRamp>0</BrakeRamp>
+          <BrakeJerk>0</BrakeJerk>
+          <RampType xsi:type="SinusRampType" />
+          <Steps>1706</Steps>
+          <NumberOfPasses>1</NumberOfPasses>
+          <Break>0</Break>
+          <NumberOfOperation>6</NumberOfOperation>
+          <NumberOfNextOperation xsi:nil="true" />
+          <GearReduction>1</GearReduction>
+          <GearReductionEnable>false</GearReductionEnable>
+        </Operation>
+        <Operation>
+          <OperationType xsi:type="RelativeOperationType">
+            <RampType xsi:type="SinusRampType" />
+          </OperationType>
+          <OperationMode xsi:type="OperationMode" />
+          <ActiveFrequency>0</ActiveFrequency>
+          <Direction>Left</Direction>
+          <ChangeDirection>false</ChangeDirection>
+          <StartFrequency>640</StartFrequency>
+          <NormalFrequency>4266</NormalFrequency>
+          <MaximumFrequency>1000</MaximumFrequency>
+          <Ramp>200</Ramp>
+          <Jerk>1</Jerk>
+          <BrakeRamp>0</BrakeRamp>
+          <BrakeJerk>0</BrakeJerk>
+          <RampType xsi:type="SinusRampType" />
+          <Steps>1706</Steps>
+          <NumberOfPasses>1</NumberOfPasses>
+          <Break>0</Break>
+          <NumberOfOperation>7</NumberOfOperation>
+          <NumberOfNextOperation xsi:nil="true" />
+          <GearReduction>1</GearReduction>
+          <GearReductionEnable>false</GearReductionEnable>
+        </Operation>
+        <Operation>
+          <OperationType xsi:type="RelativeOperationType">
+            <RampType xsi:type="SinusRampType" />
+          </OperationType>
+          <OperationMode xsi:type="OperationMode" />
+          <ActiveFrequency>0</ActiveFrequency>
+          <Direction>Left</Direction>
+          <ChangeDirection>false</ChangeDirection>
+          <StartFrequency>640</StartFrequency>
+          <NormalFrequency>4266</NormalFrequency>
+          <MaximumFrequency>1000</MaximumFrequency>
+          <Ramp>200</Ramp>
+          <Jerk>1</Jerk>
+          <BrakeRamp>0</BrakeRamp>
+          <BrakeJerk>0</BrakeJerk>
+          <RampType xsi:type="SinusRampType" />
+          <Steps>1706</Steps>
+          <NumberOfPasses>1</NumberOfPasses>
+          <Break>0</Break>
+          <NumberOfOperation>8</NumberOfOperation>
+          <NumberOfNextOperation xsi:nil="true" />
+          <GearReduction>1</GearReduction>
+          <GearReductionEnable>false</GearReductionEnable>
+        </Operation>
+        <Operation>
+          <OperationType xsi:type="RelativeOperationType">
+            <RampType xsi:type="SinusRampType" />
+          </OperationType>
+          <OperationMode xsi:type="OperationMode" />
+          <ActiveFrequency>0</ActiveFrequency>
+          <Direction>Left</Direction>
+          <ChangeDirection>false</ChangeDirection>
+          <StartFrequency>640</StartFrequency>
+          <NormalFrequency>4266</NormalFrequency>
+          <MaximumFrequency>1000</MaximumFrequency>
+          <Ramp>200</Ramp>
+          <Jerk>1</Jerk>
+          <BrakeRamp>0</BrakeRamp>
+          <BrakeJerk>0</BrakeJerk>
+          <RampType xsi:type="SinusRampType" />
+          <Steps>1706</Steps>
+          <NumberOfPasses>1</NumberOfPasses>
+          <Break>0</Break>
+          <NumberOfOperation>9</NumberOfOperation>
+          <NumberOfNextOperation xsi:nil="true" />
+          <GearReduction>1</GearReduction>
+          <GearReductionEnable>false</GearReductionEnable>
+        </Operation>
+        <Operation>
+          <OperationType xsi:type="RelativeOperationType">
+            <RampType xsi:type="SinusRampType" />
+          </OperationType>
+          <OperationMode xsi:type="OperationMode" />
+          <ActiveFrequency>0</ActiveFrequency>
+          <Direction>Left</Direction>
+          <ChangeDirection>false</ChangeDirection>
+          <StartFrequency>640</StartFrequency>
+          <NormalFrequency>4266</NormalFrequency>
+          <MaximumFrequency>1000</MaximumFrequency>
+          <Ramp>200</Ramp>
+          <Jerk>1</Jerk>
+          <BrakeRamp>0</BrakeRamp>
+          <BrakeJerk>0</BrakeJerk>
+          <RampType xsi:type="SinusRampType" />
+          <Steps>1706</Steps>
+          <NumberOfPasses>1</NumberOfPasses>
+          <Break>0</Break>
+          <NumberOfOperation>10</NumberOfOperation>
+          <NumberOfNextOperation xsi:nil="true" />
+          <GearReduction>1</GearReduction>
+          <GearReductionEnable>false</GearReductionEnable>
+        </Operation>
+        <Operation>
+          <OperationType xsi:type="RelativeOperationType">
+            <RampType xsi:type="SinusRampType" />
+          </OperationType>
+          <OperationMode xsi:type="OperationMode" />
+          <ActiveFrequency>0</ActiveFrequency>
+          <Direction>Left</Direction>
+          <ChangeDirection>false</ChangeDirection>
+          <StartFrequency>640</StartFrequency>
+          <NormalFrequency>4266</NormalFrequency>
+          <MaximumFrequency>1000</MaximumFrequency>
+          <Ramp>200</Ramp>
+          <Jerk>1</Jerk>
+          <BrakeRamp>0</BrakeRamp>
+          <BrakeJerk>0</BrakeJerk>
+          <RampType xsi:type="SinusRampType" />
+          <Steps>1706</Steps>
+          <NumberOfPasses>1</NumberOfPasses>
+          <Break>0</Break>
+          <NumberOfOperation>11</NumberOfOperation>
+          <NumberOfNextOperation xsi:nil="true" />
+          <GearReduction>1</GearReduction>
+          <GearReductionEnable>false</GearReductionEnable>
+        </Operation>
+        <Operation>
+          <OperationType xsi:type="RelativeOperationType">
+            <RampType xsi:type="SinusRampType" />
+          </OperationType>
+          <OperationMode xsi:type="OperationMode" />
+          <ActiveFrequency>0</ActiveFrequency>
+          <Direction>Left</Direction>
+          <ChangeDirection>false</ChangeDirection>
+          <StartFrequency>640</StartFrequency>
+          <NormalFrequency>4266</NormalFrequency>
+          <MaximumFrequency>1000</MaximumFrequency>
+          <Ramp>200</Ramp>
+          <Jerk>1</Jerk>
+          <BrakeRamp>0</BrakeRamp>
+          <BrakeJerk>0</BrakeJerk>
+          <RampType xsi:type="SinusRampType" />
+          <Steps>1706</Steps>
+          <NumberOfPasses>1</NumberOfPasses>
+          <Break>0</Break>
+          <NumberOfOperation>12</NumberOfOperation>
+          <NumberOfNextOperation xsi:nil="true" />
+          <GearReduction>1</GearReduction>
+          <GearReductionEnable>false</GearReductionEnable>
+        </Operation>
+        <Operation>
+          <OperationType xsi:type="RelativeOperationType">
+            <RampType xsi:type="SinusRampType" />
+          </OperationType>
+          <OperationMode xsi:type="OperationMode" />
+          <ActiveFrequency>0</ActiveFrequency>
+          <Direction>Left</Direction>
+          <ChangeDirection>false</ChangeDirection>
+          <StartFrequency>640</StartFrequency>
+          <NormalFrequency>4266</NormalFrequency>
+          <MaximumFrequency>1000</MaximumFrequency>
+          <Ramp>200</Ramp>
+          <Jerk>1</Jerk>
+          <BrakeRamp>0</BrakeRamp>
+          <BrakeJerk>0</BrakeJerk>
+          <RampType xsi:type="SinusRampType" />
+          <Steps>1706</Steps>
+          <NumberOfPasses>1</NumberOfPasses>
+          <Break>0</Break>
+          <NumberOfOperation>13</NumberOfOperation>
+          <NumberOfNextOperation xsi:nil="true" />
+          <GearReduction>1</GearReduction>
+          <GearReductionEnable>false</GearReductionEnable>
+        </Operation>
+        <Operation>
+          <OperationType xsi:type="RelativeOperationType">
+            <RampType xsi:type="SinusRampType" />
+          </OperationType>
+          <OperationMode xsi:type="OperationMode" />
+          <ActiveFrequency>0</ActiveFrequency>
+          <Direction>Left</Direction>
+          <ChangeDirection>false</ChangeDirection>
+          <StartFrequency>640</StartFrequency>
+          <NormalFrequency>4266</NormalFrequency>
+          <MaximumFrequency>1000</MaximumFrequency>
+          <Ramp>200</Ramp>
+          <Jerk>1</Jerk>
+          <BrakeRamp>0</BrakeRamp>
+          <BrakeJerk>0</BrakeJerk>
+          <RampType xsi:type="SinusRampType" />
+          <Steps>1706</Steps>
+          <NumberOfPasses>1</NumberOfPasses>
+          <Break>0</Break>
+          <NumberOfOperation>14</NumberOfOperation>
+          <NumberOfNextOperation xsi:nil="true" />
+          <GearReduction>1</GearReduction>
+          <GearReductionEnable>false</GearReductionEnable>
+        </Operation>
+        <Operation>
+          <OperationType xsi:type="RelativeOperationType">
+            <RampType xsi:type="SinusRampType" />
+          </OperationType>
+          <OperationMode xsi:type="OperationMode" />
+          <ActiveFrequency>0</ActiveFrequency>
+          <Direction>Left</Direction>
+          <ChangeDirection>false</ChangeDirection>
+          <StartFrequency>640</StartFrequency>
+          <NormalFrequency>4266</NormalFrequency>
+          <MaximumFrequency>1000</MaximumFrequency>
+          <Ramp>200</Ramp>
+          <Jerk>1</Jerk>
+          <BrakeRamp>0</BrakeRamp>
+          <BrakeJerk>0</BrakeJerk>
+          <RampType xsi:type="SinusRampType" />
+          <Steps>1706</Steps>
+          <NumberOfPasses>1</NumberOfPasses>
+          <Break>0</Break>
+          <NumberOfOperation>15</NumberOfOperation>
+          <NumberOfNextOperation xsi:nil="true" />
+          <GearReduction>1</GearReduction>
+          <GearReductionEnable>false</GearReductionEnable>
+        </Operation>
+        <Operation>
+          <OperationType xsi:type="RelativeOperationType">
+            <RampType xsi:type="SinusRampType" />
+          </OperationType>
+          <OperationMode xsi:type="OperationMode" />
+          <ActiveFrequency>0</ActiveFrequency>
+          <Direction>Left</Direction>
+          <ChangeDirection>false</ChangeDirection>
+          <StartFrequency>640</StartFrequency>
+          <NormalFrequency>4266</NormalFrequency>
+          <MaximumFrequency>1000</MaximumFrequency>
+          <Ramp>200</Ramp>
+          <Jerk>1</Jerk>
+          <BrakeRamp>0</BrakeRamp>
+          <BrakeJerk>0</BrakeJerk>
+          <RampType xsi:type="SinusRampType" />
+          <Steps>1706</Steps>
+          <NumberOfPasses>1</NumberOfPasses>
+          <Break>0</Break>
+          <NumberOfOperation>16</NumberOfOperation>
+          <NumberOfNextOperation xsi:nil="true" />
+          <GearReduction>1</GearReduction>
+          <GearReductionEnable>false</GearReductionEnable>
+        </Operation>
+        <Operation>
+          <OperationType xsi:type="RelativeOperationType">
+            <RampType xsi:type="SinusRampType" />
+          </OperationType>
+          <OperationMode xsi:type="OperationMode" />
+          <ActiveFrequency>0</ActiveFrequency>
+          <Direction>Left</Direction>
+          <ChangeDirection>false</ChangeDirection>
+          <StartFrequency>640</StartFrequency>
+          <NormalFrequency>4266</NormalFrequency>
+          <MaximumFrequency>1000</MaximumFrequency>
+          <Ramp>200</Ramp>
+          <Jerk>1</Jerk>
+          <BrakeRamp>0</BrakeRamp>
+          <BrakeJerk>0</BrakeJerk>
+          <RampType xsi:type="SinusRampType" />
+          <Steps>1706</Steps>
+          <NumberOfPasses>1</NumberOfPasses>
+          <Break>0</Break>
+          <NumberOfOperation>17</NumberOfOperation>
+          <NumberOfNextOperation xsi:nil="true" />
+          <GearReduction>1</GearReduction>
+          <GearReductionEnable>false</GearReductionEnable>
+        </Operation>
+        <Operation>
+          <OperationType xsi:type="RelativeOperationType">
+            <RampType xsi:type="SinusRampType" />
+          </OperationType>
+          <OperationMode xsi:type="OperationMode" />
+          <ActiveFrequency>0</ActiveFrequency>
+          <Direction>Left</Direction>
+          <ChangeDirection>false</ChangeDirection>
+          <StartFrequency>640</StartFrequency>
+          <NormalFrequency>4266</NormalFrequency>
+          <MaximumFrequency>1000</MaximumFrequency>
+          <Ramp>200</Ramp>
+          <Jerk>1</Jerk>
+          <BrakeRamp>0</BrakeRamp>
+          <BrakeJerk>0</BrakeJerk>
+          <RampType xsi:type="SinusRampType" />
+          <Steps>1706</Steps>
+          <NumberOfPasses>1</NumberOfPasses>
+          <Break>0</Break>
+          <NumberOfOperation>18</NumberOfOperation>
+          <NumberOfNextOperation xsi:nil="true" />
+          <GearReduction>1</GearReduction>
+          <GearReductionEnable>false</GearReductionEnable>
+        </Operation>
+        <Operation>
+          <OperationType xsi:type="RelativeOperationType">
+            <RampType xsi:type="SinusRampType" />
+          </OperationType>
+          <OperationMode xsi:type="OperationMode" />
+          <ActiveFrequency>0</ActiveFrequency>
+          <Direction>Left</Direction>
+          <ChangeDirection>false</ChangeDirection>
+          <StartFrequency>640</StartFrequency>
+          <NormalFrequency>4266</NormalFrequency>
+          <MaximumFrequency>1000</MaximumFrequency>
+          <Ramp>200</Ramp>
+          <Jerk>1</Jerk>
+          <BrakeRamp>0</BrakeRamp>
+          <BrakeJerk>0</BrakeJerk>
+          <RampType xsi:type="SinusRampType" />
+          <Steps>1706</Steps>
+          <NumberOfPasses>1</NumberOfPasses>
+          <Break>0</Break>
+          <NumberOfOperation>19</NumberOfOperation>
+          <NumberOfNextOperation xsi:nil="true" />
+          <GearReduction>1</GearReduction>
+          <GearReductionEnable>false</GearReductionEnable>
+        </Operation>
+        <Operation>
+          <OperationType xsi:type="RelativeOperationType">
+            <RampType xsi:type="SinusRampType" />
+          </OperationType>
+          <OperationMode xsi:type="OperationMode" />
+          <ActiveFrequency>0</ActiveFrequency>
+          <Direction>Left</Direction>
+          <ChangeDirection>false</ChangeDirection>
+          <StartFrequency>640</StartFrequency>
+          <NormalFrequency>4266</NormalFrequency>
+          <MaximumFrequency>1000</MaximumFrequency>
+          <Ramp>200</Ramp>
+          <Jerk>1</Jerk>
+          <BrakeRamp>0</BrakeRamp>
+          <BrakeJerk>0</BrakeJerk>
+          <RampType xsi:type="SinusRampType" />
+          <Steps>1706</Steps>
+          <NumberOfPasses>1</NumberOfPasses>
+          <Break>0</Break>
+          <NumberOfOperation>20</NumberOfOperation>
+          <NumberOfNextOperation xsi:nil="true" />
+          <GearReduction>1</GearReduction>
+          <GearReductionEnable>false</GearReductionEnable>
+        </Operation>
+        <Operation>
+          <OperationType xsi:type="RelativeOperationType">
+            <RampType xsi:type="SinusRampType" />
+          </OperationType>
+          <OperationMode xsi:type="OperationMode" />
+          <ActiveFrequency>0</ActiveFrequency>
+          <Direction>Left</Direction>
+          <ChangeDirection>false</ChangeDirection>
+          <StartFrequency>640</StartFrequency>
+          <NormalFrequency>4266</NormalFrequency>
+          <MaximumFrequency>1000</MaximumFrequency>
+          <Ramp>200</Ramp>
+          <Jerk>1</Jerk>
+          <BrakeRamp>0</BrakeRamp>
+          <BrakeJerk>0</BrakeJerk>
+          <RampType xsi:type="SinusRampType" />
+          <Steps>1706</Steps>
+          <NumberOfPasses>1</NumberOfPasses>
+          <Break>0</Break>
+          <NumberOfOperation>21</NumberOfOperation>
+          <NumberOfNextOperation xsi:nil="true" />
+          <GearReduction>1</GearReduction>
+          <GearReductionEnable>false</GearReductionEnable>
+        </Operation>
+        <Operation>
+          <OperationType xsi:type="RelativeOperationType">
+            <RampType xsi:type="SinusRampType" />
+          </OperationType>
+          <OperationMode xsi:type="OperationMode" />
+          <ActiveFrequency>0</ActiveFrequency>
+          <Direction>Right</Direction>
+          <ChangeDirection>false</ChangeDirection>
+          <StartFrequency>640</StartFrequency>
+          <NormalFrequency>4266</NormalFrequency>
+          <MaximumFrequency>1000</MaximumFrequency>
+          <Ramp>200</Ramp>
+          <Jerk>1</Jerk>
+          <BrakeRamp>0</BrakeRamp>
+          <BrakeJerk>0</BrakeJerk>
+          <RampType xsi:type="SinusRampType" />
+          <Steps>42</Steps>
+          <NumberOfPasses>1</NumberOfPasses>
+          <Break>0</Break>
+          <NumberOfOperation>22</NumberOfOperation>
+          <NumberOfNextOperation xsi:nil="true" />
+          <GearReduction>1</GearReduction>
+          <GearReductionEnable>false</GearReductionEnable>
+        </Operation>
+        <Operation>
+          <OperationType xsi:type="RelativeOperationType">
+            <RampType xsi:type="SinusRampType" />
+          </OperationType>
+          <OperationMode xsi:type="OperationMode" />
+          <ActiveFrequency>0</ActiveFrequency>
+          <Direction>Left</Direction>
+          <ChangeDirection>false</ChangeDirection>
+          <StartFrequency>640</StartFrequency>
+          <NormalFrequency>4266</NormalFrequency>
+          <MaximumFrequency>1000</MaximumFrequency>
+          <Ramp>200</Ramp>
+          <Jerk>1</Jerk>
+          <BrakeRamp>0</BrakeRamp>
+          <BrakeJerk>0</BrakeJerk>
+          <RampType xsi:type="SinusRampType" />
+          <Steps>1706</Steps>
+          <NumberOfPasses>1</NumberOfPasses>
+          <Break>0</Break>
+          <NumberOfOperation>23</NumberOfOperation>
+          <NumberOfNextOperation xsi:nil="true" />
+          <GearReduction>1</GearReduction>
+          <GearReductionEnable>false</GearReductionEnable>
+        </Operation>
+        <Operation>
+          <OperationType xsi:type="RelativeOperationType">
+            <RampType xsi:type="SinusRampType" />
+          </OperationType>
+          <OperationMode xsi:type="OperationMode" />
+          <ActiveFrequency>0</ActiveFrequency>
+          <Direction>Left</Direction>
+          <ChangeDirection>false</ChangeDirection>
+          <StartFrequency>640</StartFrequency>
+          <NormalFrequency>4266</NormalFrequency>
+          <MaximumFrequency>1000</MaximumFrequency>
+          <Ramp>200</Ramp>
+          <Jerk>1</Jerk>
+          <BrakeRamp>0</BrakeRamp>
+          <BrakeJerk>0</BrakeJerk>
+          <RampType xsi:type="SinusRampType" />
+          <Steps>1706</Steps>
+          <NumberOfPasses>1</NumberOfPasses>
+          <Break>0</Break>
+          <NumberOfOperation>24</NumberOfOperation>
+          <NumberOfNextOperation xsi:nil="true" />
+          <GearReduction>1</GearReduction>
+          <GearReductionEnable>false</GearReductionEnable>
+        </Operation>
+        <Operation>
+          <OperationType xsi:type="RelativeOperationType">
+            <RampType xsi:type="SinusRampType" />
+          </OperationType>
+          <OperationMode xsi:type="OperationMode" />
+          <ActiveFrequency>0</ActiveFrequency>
+          <Direction>Left</Direction>
+          <ChangeDirection>false</ChangeDirection>
+          <StartFrequency>640</StartFrequency>
+          <NormalFrequency>4266</NormalFrequency>
+          <MaximumFrequency>1000</MaximumFrequency>
+          <Ramp>200</Ramp>
+          <Jerk>1</Jerk>
+          <BrakeRamp>0</BrakeRamp>
+          <BrakeJerk>0</BrakeJerk>
+          <RampType xsi:type="SinusRampType" />
+          <Steps>1706</Steps>
+          <NumberOfPasses>1</NumberOfPasses>
+          <Break>0</Break>
+          <NumberOfOperation>25</NumberOfOperation>
+          <NumberOfNextOperation xsi:nil="true" />
+          <GearReduction>1</GearReduction>
+          <GearReductionEnable>false</GearReductionEnable>
+        </Operation>
+        <Operation>
+          <OperationType xsi:type="RelativeOperationType">
+            <RampType xsi:type="SinusRampType" />
+          </OperationType>
+          <OperationMode xsi:type="OperationMode" />
+          <ActiveFrequency>0</ActiveFrequency>
+          <Direction>Left</Direction>
+          <ChangeDirection>false</ChangeDirection>
+          <StartFrequency>640</StartFrequency>
+          <NormalFrequency>4266</NormalFrequency>
+          <MaximumFrequency>1000</MaximumFrequency>
+          <Ramp>200</Ramp>
+          <Jerk>1</Jerk>
+          <BrakeRamp>0</BrakeRamp>
+          <BrakeJerk>0</BrakeJerk>
+          <RampType xsi:type="SinusRampType" />
+          <Steps>1706</Steps>
+          <NumberOfPasses>1</NumberOfPasses>
+          <Break>0</Break>
+          <NumberOfOperation>26</NumberOfOperation>
+          <NumberOfNextOperation xsi:nil="true" />
+          <GearReduction>1</GearReduction>
+          <GearReductionEnable>false</GearReductionEnable>
+        </Operation>
+        <Operation>
+          <OperationType xsi:type="RelativeOperationType">
+            <RampType xsi:type="SinusRampType" />
+          </OperationType>
+          <OperationMode xsi:type="OperationMode" />
+          <ActiveFrequency>0</ActiveFrequency>
+          <Direction>Left</Direction>
+          <ChangeDirection>false</ChangeDirection>
+          <StartFrequency>640</StartFrequency>
+          <NormalFrequency>4266</NormalFrequency>
+          <MaximumFrequency>1000</MaximumFrequency>
+          <Ramp>200</Ramp>
+          <Jerk>1</Jerk>
+          <BrakeRamp>0</BrakeRamp>
+          <BrakeJerk>0</BrakeJerk>
+          <RampType xsi:type="SinusRampType" />
+          <Steps>1706</Steps>
+          <NumberOfPasses>1</NumberOfPasses>
+          <Break>0</Break>
+          <NumberOfOperation>27</NumberOfOperation>
+          <NumberOfNextOperation xsi:nil="true" />
+          <GearReduction>1</GearReduction>
+          <GearReductionEnable>false</GearReductionEnable>
+        </Operation>
+        <Operation>
+          <OperationType xsi:type="RelativeOperationType">
+            <RampType xsi:type="SinusRampType" />
+          </OperationType>
+          <OperationMode xsi:type="OperationMode" />
+          <ActiveFrequency>0</ActiveFrequency>
+          <Direction>Left</Direction>
+          <ChangeDirection>false</ChangeDirection>
+          <StartFrequency>640</StartFrequency>
+          <NormalFrequency>4266</NormalFrequency>
+          <MaximumFrequency>1000</MaximumFrequency>
+          <Ramp>200</Ramp>
+          <Jerk>1</Jerk>
+          <BrakeRamp>0</BrakeRamp>
+          <BrakeJerk>0</BrakeJerk>
+          <RampType xsi:type="SinusRampType" />
+          <Steps>1706</Steps>
+          <NumberOfPasses>1</NumberOfPasses>
+          <Break>0</Break>
+          <NumberOfOperation>28</NumberOfOperation>
+          <NumberOfNextOperation xsi:nil="true" />
+          <GearReduction>1</GearReduction>
+          <GearReductionEnable>false</GearReductionEnable>
+        </Operation>
+        <Operation>
+          <OperationType xsi:type="RelativeOperationType">
+            <RampType xsi:type="SinusRampType" />
+          </OperationType>
+          <OperationMode xsi:type="OperationMode" />
+          <ActiveFrequency>0</ActiveFrequency>
+          <Direction>Left</Direction>
+          <ChangeDirection>false</ChangeDirection>
+          <StartFrequency>640</StartFrequency>
+          <NormalFrequency>4266</NormalFrequency>
+          <MaximumFrequency>1000</MaximumFrequency>
+          <Ramp>200</Ramp>
+          <Jerk>1</Jerk>
+          <BrakeRamp>0</BrakeRamp>
+          <BrakeJerk>0</BrakeJerk>
+          <RampType xsi:type="SinusRampType" />
+          <Steps>1706</Steps>
+          <NumberOfPasses>1</NumberOfPasses>
+          <Break>0</Break>
+          <NumberOfOperation>29</NumberOfOperation>
+          <NumberOfNextOperation xsi:nil="true" />
+          <GearReduction>1</GearReduction>
+          <GearReductionEnable>false</GearReductionEnable>
+        </Operation>
+        <Operation>
+          <OperationType xsi:type="RelativeOperationType">
+            <RampType xsi:type="SinusRampType" />
+          </OperationType>
+          <OperationMode xsi:type="OperationMode" />
+          <ActiveFrequency>0</ActiveFrequency>
+          <Direction>Left</Direction>
+          <ChangeDirection>false</ChangeDirection>
+          <StartFrequency>640</StartFrequency>
+          <NormalFrequency>4266</NormalFrequency>
+          <MaximumFrequency>1000</MaximumFrequency>
+          <Ramp>200</Ramp>
+          <Jerk>1</Jerk>
+          <BrakeRamp>0</BrakeRamp>
+          <BrakeJerk>0</BrakeJerk>
+          <RampType xsi:type="SinusRampType" />
+          <Steps>1706</Steps>
+          <NumberOfPasses>1</NumberOfPasses>
+          <Break>0</Break>
+          <NumberOfOperation>30</NumberOfOperation>
+          <NumberOfNextOperation xsi:nil="true" />
+          <GearReduction>1</GearReduction>
+          <GearReductionEnable>false</GearReductionEnable>
+        </Operation>
+        <Operation>
+          <OperationType xsi:type="ReferenceRunExternalOperationType">
+            <RampType xsi:type="SinusRampType" />
+          </OperationType>
+          <OperationMode xsi:type="OperationMode" />
+          <ActiveFrequency>0</ActiveFrequency>
+          <Direction>Left</Direction>
+          <ChangeDirection>false</ChangeDirection>
+          <StartFrequency>640</StartFrequency>
+          <NormalFrequency>426</NormalFrequency>
+          <MaximumFrequency>1000</MaximumFrequency>
+          <Ramp>200</Ramp>
+          <Jerk>1</Jerk>
+          <BrakeRamp>0</BrakeRamp>
+          <BrakeJerk>0</BrakeJerk>
+          <RampType xsi:type="SinusRampType" />
+          <Steps>400</Steps>
+          <NumberOfPasses>1</NumberOfPasses>
+          <Break>0</Break>
+          <NumberOfOperation>31</NumberOfOperation>
+          <NumberOfNextOperation xsi:nil="true" />
+          <GearReduction>1</GearReduction>
+          <GearReductionEnable>false</GearReductionEnable>
+        </Operation>
+      </OperationsList>
+    </MotorSetting>
+  </MotorSettings>
+</MotorSettingsFile>
