@@ -441,6 +441,7 @@ int moveMotor(int value)
   digitalWrite(CS, HIGH);
 }
 
+// PLACE HOLDER FOR TESTING WRITING SPEED TO A MOTOR
 void writeAngle(int setAngle){
   Serial.println("Hi, we're in writeAngle");
 }
@@ -520,6 +521,7 @@ void resetMotorPins(){
   
 }
 
+// Initialize the original position of the inner barrel. Includes some magnet testing code, which is not currently used.
 void initializePositions(){
   myStepper.setSpeed(stepperSpeed/10);
   writeAngle(0);
@@ -550,6 +552,7 @@ void initializePositions(){
   
 }
 
+// If an IR interrupt is triggered, whether the finger is inside or outside, it runs this function and if its inside, detach the motor, if its outside, restart the trial.
 void fingerInside(char fingerState){
   switch(fingerState){
     case 'I':
@@ -578,6 +581,7 @@ void fingerInside(char fingerState){
   }
 }
 
+// ISR: Interrupt to trigger manual treat dispensing (INCORPORATES DEBOUNCING INTO THE ISR, NOT USING AN EXTERNAL DEBOUNCE FUNCTION)
 void treatDispense() {
    static unsigned long last_interrupt_time = 0;
    unsigned long interrupt_time = millis();
@@ -589,6 +593,7 @@ void treatDispense() {
    last_interrupt_time = interrupt_time;
 }
 
+// ISR: IR finger sensors tripped will trigger this interrupt which declares whether a finger was removed or inserted into a reward pocket
 void sensorInterrupt() {
   // DEBUG: Serial output if IR sensor tripped
   if (Debug){
@@ -607,7 +612,7 @@ void sensorInterrupt() {
   }
 }
 
-// This routine will only be called on any signal change on encoder pins: exactly where we need to check.
+// ISR: This routine will only be called on any signal change on encoder pins.
 void encInt(){
   encoder.tick(); // just call tick() to check the state.
   Encoder_Count++;
@@ -628,6 +633,7 @@ void encInt(){
   pos = newPos;
 }
 
+// ISR: If the magnet is tripped, determine the potentiometer position when it was tripped <----------------------- CURRENTLY NOT USED
 void magTripped(){
   magPotPosit = map(analogRead(potPin), 0, 1023, 0, 180);
   magnetTestFlag = 1;
@@ -636,6 +642,7 @@ void magTripped(){
   }
 }
 
+// ISR: Read the directional interrupt pin and assign a rotation direction based on the digital input pin
 void dirInterrupt() {
 
   if(digitalRead(hardDirPin)){
@@ -646,10 +653,12 @@ void dirInterrupt() {
  
 }
 
+// Smoothing function to take a value and the previous smoothed value and then find a smoothed new value based on the strength of the variable "smoothStrength"
 float smooth(int t_rawVal, float t_smoothedVal) {
     return  t_smoothedVal + ((t_rawVal - t_smoothedVal) + 0.5) / smoothStrength;  // +0.5 for rounding
 }
 
+// Debouncing for digital inputs <------------------- CURRENTLY NOT USED
 bool debounce(int buttonName)
 {
   byte count = 0;
